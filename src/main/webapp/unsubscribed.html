@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <title>Bento</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 "/>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+</head>
+<body style="margin: 0; padding: 0; text-align: center; background-color: #edf0f0">
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<body style="margin: 0; padding: 0; text-align: center; background-color: #edf0f0">
+<table cellpadding="0" cellspacing="0" width="100%" align="center">
+  <tr>
+    <td>
+      <table style="width: 750px;" cellpadding="0" cellspacing="0" align="center">
+        <tr>
+          <td>
+            <table width="750" style="width: 750px !important;" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="min-width: 750px; font-size: 0; line-height: 0;">&nbsp;</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 44px 30px 42px 30px; text-align: center; background-color: #95ca61">
+            <a target="_blank" href="https://bentonow.com/"><img src="https://bentonow.com/site/img/bento-logo.png" border="0" style="outline: none; width: 470px; height: 101px;" alt="bento"/></a>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 0 0 38px">
+            <table style="width: 100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="font-size: 18px; line-height: 20px; border-collapse: collapse !important; padding: 10px 20px; color: #666; padding: 20px 10px; background-color: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,.2);">${email} has been removed</td>
+              </tr>
+              <tr>
+                <td style="font-size: 18px; line-height: 20px; border-collapse: collapse !important; padding: 10px 20px; color: #666;">You have been unsubscribed</td>
+              </tr>
+              <tr style="color: #666">
+                <td style="padding: 20px 10px; background-color: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,.2);">You have been successfully unsubscribed from email communications.<br/>
+                If you did this in error, you may re-subscribe by clicking the button below.<br/><br/>
+                <form action="${serverUrl}/r" method="post">
+                  <input type="hidden" name="e" value="${email}">
+                  <button class="btn btn-large" style="color: #fff; background-color: #8abb5a;" type="submit">Re-subscribe</button></td>
+                </form>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <!-- fix -->
+  <tr>
+    <td><div style="display:none; white-space:nowrap; color:#fff;">- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</div></td>
+  </tr>
+</table>
+</body>
+</html>
