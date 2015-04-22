@@ -123,7 +123,7 @@ public class Meal extends Entity {
     return cacheTier.fetch(from, to, null).values();
   }
 
-  private static final String mealServiceUrl = "https://api.bentonow.com/extapi/reports/survey/range/${fromDate}/${endDate}?" + Config.getParameters(Config.getConfig()._server(0)._webApi(0)._parameter());
+  private static final String mealServiceUrl = "https://api.bentonow.com/extapi/reports/survey/range/${fromDate}/${endDate}?" + Config.getParameters(Config.getConfig()._webApi(0)._parameters(0));
 
   private static final TieredRangeFetcher<Long,Meal> webServiceTier = new TieredRangeFetcher<Long,Meal>(null) {
     private final Long[] range = new Long[] {Long.MIN_VALUE, Long.MAX_VALUE};
@@ -150,7 +150,7 @@ public class Meal extends Entity {
           final int id = object.get("pk_CustomerBentoBox").getAsInt();
           final int orderId = object.get("pk_Order").getAsInt();
           final Date createdOn = dateFormatLocal.get().parse(object.get("created_at").getAsString());
-          final String email = "seva@safris.com";//object.get("email").getAsString().replaceFirst("@.*", "@parallelreality.com"); // FIXME: The replaceFirst is for testing!
+          final String email = object.get("email").getAsString();
           final List<Dish> dishes = new ArrayList<Dish>();
           dishes.add(Dish.fetch(object.get("main_id").getAsInt()));
           dishes.add(Dish.fetch(object.get("side1_id").getAsInt()));

@@ -83,7 +83,7 @@ public class Server {
     server.start();
 
     final MailSender command = new MailSender(config._server(0), config._mail(0));
-    final Worker worker = new Worker(config._worker(0), config._match(0), command);
+    final Worker worker = new Worker(config._worker(0), command);
     worker.start();
 
     server.join();

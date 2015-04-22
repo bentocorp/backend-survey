@@ -2,7 +2,6 @@ package com.bentonow.survey;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.safris.commons.xml.XMLException;
@@ -11,7 +10,7 @@ import org.safris.commons.xml.dom.DOMs;
 import org.safris.xml.generator.compiler.runtime.Bindings;
 import org.xml.sax.InputSource;
 
-import com.bentonow.resource.survey.config.$cf_server;
+import com.bentonow.resource.survey.config.$cf_parameters;
 import com.bentonow.resource.survey.config.cf_config;
 
 public class Config {
@@ -39,12 +38,12 @@ public class Config {
     return config;
   }
 
-  public static String getParameters(final List<$cf_server._webApi._parameter> parameters) {
-    if (parameters.size() == 0)
+  public static String getParameters(final $cf_parameters parameters) {
+    if (parameters.isNull())
       return "";
 
     final StringBuilder buffer = new StringBuilder();
-    for (final $cf_server._webApi._parameter parameter : parameters)
+    for (final $cf_parameters._parameter parameter : parameters._parameter())
       buffer.append("&").append(parameter._name$().text()).append("=").append(parameter._value$().text());
 
     return buffer.substring(1);

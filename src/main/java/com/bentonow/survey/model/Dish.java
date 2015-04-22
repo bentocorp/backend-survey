@@ -25,7 +25,7 @@ public class Dish extends Entity {
   }
 
   private static final Logger logger = Logger.getLogger(Dish.class.getName());
-  private static final String dishServiceUrl = "https://api.bentonow.com/extapi/dish/${id}?" + Config.getParameters(Config.getConfig()._server(0)._webApi(0)._parameter());
+  private static final String dishServiceUrl = "https://api.bentonow.com/extapi/dish/${id}?" + Config.getParameters(Config.getConfig()._webApi(0)._parameters(0));
   private static final Map<Integer,Dish> idToDish = new HashMap<Integer,Dish>();
 
   public static Dish create(final int id, final String name, final String description, final Type type, final String imageUrl) throws IOException, SQLException {
@@ -81,7 +81,7 @@ public class Dish extends Entity {
             name = object.get("name").getAsString();
             description = object.get("description").getAsString();
             type = Type.valueOf(object.get("type").getAsString().toUpperCase());
-            imageUrl = object.get("image1").getAsString();
+            imageUrl = object.get("email_image1").getAsString();
           }
 
           try (final PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO dish VALUES (?, ?, ?, ?, ?)")) {

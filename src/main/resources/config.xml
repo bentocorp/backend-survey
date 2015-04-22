@@ -8,37 +8,34 @@
     <logging global="FINER"/>
   </debug>
   
-  <server host="localhost" port="8080">
-    <webApi>
-      <parameter name="api_username" value="seva_kjHgbmAq*7%40%235_%25KLbH"/>
-      <parameter name="api_password" value="%245y%2410%24Ldvko.Fby1IhGHl16njuLOIbWlwz9TvMbBjqrph%2FlJuYIQxqTMyuG.86"/>
-    </webApi>
-  </server>
+  <server host="localhost" port="8080"/>
   
   <admin>
     <credentials username="admin" password="admin"/>
   </admin>
   
-  <match>
-    <createdOn>
-      <start minutesBeforeNow="3500"/>
-      <end minutesBeforeNow="60"/>
-    </createdOn>
-  </match>
+  <webApi>
+    <parameters>
+      <parameter name="api_username" value="seva_kjHgbmAq*7%40%235_%25KLbH"/>
+      <parameter name="api_password" value="%245y%2410%24Ldvko.Fby1IhGHl16njuLOIbWlwz9TvMbBjqrph%2FlJuYIQxqTMyuG.86"/>
+    </parameters>
+  </webApi>
   
   <worker>
+    <match field="createdOn">
+      <start minutesBeforeNow="3500"/>
+      <end minutesBeforeNow="60"/>
+    </match>
     <execute every="10" xsi:type="seconds"/>
   </worker>
   
   <mail>
     <server host="smtp.mailgun.org" port="465" protocol="SMTPS">
       <credentials username="postmaster@mg.bentonow.com" password="45ca46a82cd8b6e3ae4873bcb03c0cad"/>
-      <email from="noreply@bentonow.com" subject="Bento Experience Survey"/>
     </server>
-    <!--<server host="smtp.safris.com" port="465" protocol="SMTP">
-      <credentials username="filehost" password="FileH0st"/>
-      <email from="noreply@bentonow.com" subject="Bento Experience Survey"/>
-    </server>-->
+    <message from="noreply@bentonow.com" subject="Bento Experience Survey">
+      <override to="seva@safris.com"/>
+    </message>
   </mail>
   
 </config>

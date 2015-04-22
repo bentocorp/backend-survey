@@ -16,9 +16,9 @@ import org.safris.xml.generator.compiler.runtime.Bindings;
 import com.bentonow.resource.survey.config.$cf_days;
 import com.bentonow.resource.survey.config.$cf_execute;
 import com.bentonow.resource.survey.config.$cf_hours;
-import com.bentonow.resource.survey.config.$cf_match;
 import com.bentonow.resource.survey.config.$cf_minutes;
 import com.bentonow.resource.survey.config.$cf_seconds;
+import com.bentonow.resource.survey.config.$cf_webApi;
 import com.bentonow.resource.survey.config.$cf_worker;
 import com.bentonow.survey.model.Meal;
 
@@ -30,11 +30,11 @@ public class Worker implements Runnable {
   private final int startMinutesBeforeNow;
   private final int endMinutesBeforeNow;
 
-  public Worker(final $cf_worker config, final $cf_match matchConfig, final MailSender sender) {
+  public Worker(final $cf_worker config, final MailSender sender) {
     this.config = config;
     this.sender = sender;
-    startMinutesBeforeNow = matchConfig._createdOn(0)._start(0)._minutesBeforeNow$().text();
-    endMinutesBeforeNow = matchConfig._createdOn(0)._end(0)._minutesBeforeNow$().text();
+    startMinutesBeforeNow = config._match(0)._start(0)._minutesBeforeNow$().text();
+    endMinutesBeforeNow = config._match(0)._end(0)._minutesBeforeNow$().text();
   }
 
   public void start() {

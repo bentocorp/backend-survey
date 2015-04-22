@@ -586,20 +586,6 @@
   </xs:simpleType>
   
   <xs:complexType name="server">
-    <xs:all minOccurs="0">
-      <xs:element name="webApi">
-        <xs:complexType>
-          <xs:sequence minOccurs="0" maxOccurs="unbounded">
-            <xs:element name="parameter">
-              <xs:complexType>
-                <xs:attribute name="name" type="xs:NCName" use="required"/>
-                <xs:attribute name="value" type="xs:token" use="required"/>
-              </xs:complexType>
-            </xs:element>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-    </xs:all>
     <xs:attribute name="host" type="xs:token"/>
     <xs:attribute name="port" type="cf:port" use="required"/>
   </xs:complexType>
@@ -615,12 +601,6 @@
                 <xs:attribute name="password" type="xs:string" use="required"/>
               </xs:complexType>
             </xs:element>
-            <xs:element name="email">
-              <xs:complexType>
-                <xs:attribute name="from" type="cf:email" use="required"/>
-                <xs:attribute name="subject" type="xs:string" use="required"/>
-              </xs:complexType>
-            </xs:element>
           </xs:all>
           <xs:attribute name="host" type="xs:token" use="required"/>
           <xs:attribute name="port" type="cf:port" use="required"/>
@@ -632,6 +612,19 @@
               </xs:restriction>
             </xs:simpleType>
           </xs:attribute>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="message">
+        <xs:complexType>
+          <xs:all minOccurs="0">
+            <xs:element name="override">
+              <xs:complexType>
+                <xs:attribute name="to" type="xs:token" use="required"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:all>
+          <xs:attribute name="from" type="cf:email" use="required"/>
+          <xs:attribute name="subject" type="xs:string" use="required"/>
         </xs:complexType>
       </xs:element>
     </xs:all>
@@ -750,21 +743,34 @@
     <xs:attribute name="minutesBeforeNow" type="xs:nonNegativeInteger" use="required"/>
   </xs:complexType>
 
-  <xs:complexType name="match">
-    <xs:all>
-      <xs:element name="createdOn">
+  <xs:complexType name="parameters">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="parameter">
         <xs:complexType>
-          <xs:all>
-            <xs:element name="start" type="cf:minutesBeforeNow"/>
-            <xs:element name="end" type="cf:minutesBeforeNow"/>
-          </xs:all>
+          <xs:attribute name="name" type="xs:NCName" use="required"/>
+          <xs:attribute name="value" type="xs:token" use="required"/>
         </xs:complexType>
       </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="webApi">
+    <xs:all>
+      <xs:element name="parameters" type="cf:parameters" minOccurs="0"/>
     </xs:all>
   </xs:complexType>
   
   <xs:complexType name="worker">
     <xs:all>
+      <xs:element name="match">
+        <xs:complexType>
+          <xs:all>
+            <xs:element name="start" type="cf:minutesBeforeNow"/>
+            <xs:element name="end" type="cf:minutesBeforeNow"/>
+          </xs:all>
+          <xs:attribute name="field" fixed="createdOn" use="required"/>
+        </xs:complexType>
+      </xs:element>
       <xs:element name="execute" type="cf:execute"/>
     </xs:all>
   </xs:complexType>
@@ -818,7 +824,7 @@
             </xs:all>
           </xs:complexType>
         </xs:element>
-        <xs:element name="match" type="cf:match"/>
+        <xs:element name="webApi" type="cf:webApi"/>
         <xs:element name="worker" type="cf:worker"/>
         <xs:element name="mail" type="cf:mail"/>
       </xs:sequence>
