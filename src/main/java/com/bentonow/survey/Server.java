@@ -23,10 +23,6 @@ import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.security.Credential;
 import org.safris.commons.cli.Options;
 import org.safris.commons.lang.Resources;
-import org.safris.commons.xml.dom.DOMStyle;
-import org.safris.commons.xml.dom.DOMs;
-import org.safris.xml.generator.compiler.runtime.Bindings;
-import org.xml.sax.InputSource;
 
 import com.bentonow.resource.survey.config.$cf_logging;
 import com.bentonow.resource.survey.config.cf_config;
@@ -39,15 +35,11 @@ public class Server {
   private static final Logger logger = Logger.getLogger(Server.class.getName());
 
   public static void main(final String[] args) throws Exception {
-    main(Options.parse(Resources.getResource("cli.xml").getURL(), Server.class, args));
-  }
-
-  public static void main(final Options options) throws Exception {
+    final Options options = Options.parse(Resources.getResource("cli.xml").getURL(), Server.class, args);
     logger.info(options.toString());
     final String configArg = options.getOption("config");
-    final URL configURL = configArg != null ? new File(configArg).toURI().toURL() : Resources.getResource("config.xml").getURL();
-    final cf_config config = (cf_config)Bindings.parse(new InputSource(configURL.openStream()));
-    logger.info(DOMs.domToString(Bindings.marshal(config), DOMStyle.INDENT));
+    Config.load(configArg != null ? new File(configArg).toURI().toURL() : Resources.getResource("config.xml").getURL());
+    final cf_config config = Config.getConfig();
 
     if (config._debug(0)._logging() != null) {
       final Logger rootLogger = Logger.getLogger("");

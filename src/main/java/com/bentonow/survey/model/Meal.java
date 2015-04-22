@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 
 import org.safris.commons.util.TieredRangeFetcher;
 
+import com.bentonow.survey.Config;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -122,8 +123,9 @@ public class Meal extends Entity {
     return cacheTier.fetch(from, to, null).values();
   }
 
+  private static final String mealServiceUrl = "https://api.bentonow.com/extapi/reports/survey/range/${fromDate}/${endDate}" + Config.getParameters(Config.getConfig()._server(0)._webApi(0)._parameter());
+
   private static final TieredRangeFetcher<Long,Meal> webServiceTier = new TieredRangeFetcher<Long,Meal>(null) {
-    private final String mealServiceUrl = "https://api.bentonow.com/extapi/reports/survey/range/${fromDate}/${endDate}" + webServiceAuthParams;
     private final Long[] range = new Long[] {Long.MIN_VALUE, Long.MAX_VALUE};
 
     protected Long[] range() {

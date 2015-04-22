@@ -325,6 +325,11 @@
     </dependency>
     <dependency>
       <groupId>org.safris.commons</groupId>
+      <artifactId>dbcp</artifactId>
+      <version>0.2.13</version>
+    </dependency>
+    <dependency>
+      <groupId>org.safris.commons</groupId>
       <artifactId>sql</artifactId>
       <version>1.0.12</version>
     </dependency>

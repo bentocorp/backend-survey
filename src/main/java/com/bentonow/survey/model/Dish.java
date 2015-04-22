@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import com.bentonow.survey.Config;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -24,7 +25,7 @@ public class Dish extends Entity {
   }
 
   private static final Logger logger = Logger.getLogger(Dish.class.getName());
-  private static final String dishServiceUrl = "https://api.bentonow.com/extapi/dish/${id}" + webServiceAuthParams;
+  private static final String dishServiceUrl = "https://api.bentonow.com/extapi/dish/${id}" + Config.getParameters(Config.getConfig()._server(0)._webApi(0)._parameter());
   private static final Map<Integer,Dish> idToDish = new HashMap<Integer,Dish>();
 
   public static Dish create(final int id, final String name, final String description, final Type type, final String imageUrl) throws IOException, SQLException {

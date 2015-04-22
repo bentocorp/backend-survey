@@ -8,7 +8,12 @@
     <logging global="FINER"/>
   </debug>
   
-  <server host="localhost" port="8080"/>
+  <server host="localhost" port="8080">
+    <webApi>
+      <parameter name="api_username" value="seva_kjHgbmAq*7%40%235_%25KLbH"/>
+      <parameter name="api_password" value="%245y%2410%24Ldvko.Fby1IhGHl16njuLOIbWlwz9TvMbBjqrph%2FlJuYIQxqTMyuG.86"/>
+    </webApi>
+  </server>
   
   <admin>
     <credentials username="admin" password="admin"/>
