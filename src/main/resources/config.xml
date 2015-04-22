@@ -4,11 +4,11 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://resource.bentonow.com/survey/config.xsd config.xsd">
   
-  <debug externalResourcesAccess="true">
+  <debug externalResourcesAccess="false">
     <logging global="FINER"/>
   </debug>
   
-  <server host="localhost" port="8080"/>
+  <server host="dev.survey.bentonow.com" port="80"/>
   
   <admin>
     <credentials username="admin" password="admin"/>
@@ -23,10 +23,10 @@
   
   <worker>
     <match field="createdOn">
-      <start minutesBeforeNow="3500"/>
-      <end minutesBeforeNow="60"/>
+      <start minutesBeforeNow="1440"/>
+      <end minutesBeforeNow="90"/>
     </match>
-    <execute every="10" xsi:type="seconds"/>
+    <execute every="1" xsi:type="minutes" begin="0"/>
   </worker>
   
   <mail>

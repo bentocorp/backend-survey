@@ -34,15 +34,6 @@ public class SubmissionServlet extends TemplatedServlet {
     try {
       final int mealRating = Integer.parseInt(request.getParameter("r"));
       if (MealSurvey.lookupMealSurvey(mealId) == null) {
-        // TODO: what do we do with the extra email the customer provides on the survey form???
-        // String email = request.getParameter("e");
-        // try {
-        // new InternetAddress(email).validate();
-        // }
-        // catch (final AddressException e) {
-        // email = null;
-        // }
-
         final String mealComment = request.getParameter("c");
         final List<DishSurvey> dishSurveys = new ArrayList<DishSurvey>();
 
