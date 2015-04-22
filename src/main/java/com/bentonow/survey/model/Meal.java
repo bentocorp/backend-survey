@@ -123,7 +123,7 @@ public class Meal extends Entity {
     return cacheTier.fetch(from, to, null).values();
   }
 
-  private static final String mealServiceUrl = "https://api.bentonow.com/extapi/reports/survey/range/${fromDate}/${endDate}" + Config.getParameters(Config.getConfig()._server(0)._webApi(0)._parameter());
+  private static final String mealServiceUrl = "https://api.bentonow.com/extapi/reports/survey/range/${fromDate}/${endDate}?" + Config.getParameters(Config.getConfig()._server(0)._webApi(0)._parameter());
 
   private static final TieredRangeFetcher<Long,Meal> webServiceTier = new TieredRangeFetcher<Long,Meal>(null) {
     private final Long[] range = new Long[] {Long.MIN_VALUE, Long.MAX_VALUE};

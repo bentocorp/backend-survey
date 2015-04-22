@@ -2,9 +2,7 @@ package com.bentonow.survey;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import org.safris.commons.xml.XMLException;
@@ -41,11 +39,14 @@ public class Config {
     return config;
   }
 
-  public static Map<String,String> getParameters(final List<$cf_server._webApi._parameter> parameters) {
-    final Map<String,String> map = new HashMap<String,String>();
-    for (final $cf_server._webApi._parameter parameter : parameters)
-      map.put(parameter._name$().text(), parameter._value$().text());
+  public static String getParameters(final List<$cf_server._webApi._parameter> parameters) {
+    if (parameters.size() == 0)
+      return "";
 
-    return map;
+    final StringBuilder buffer = new StringBuilder();
+    for (final $cf_server._webApi._parameter parameter : parameters)
+      buffer.append("&").append(parameter._name$().text()).append("=").append(parameter._value$().text());
+
+    return buffer.substring(1);
   }
 }

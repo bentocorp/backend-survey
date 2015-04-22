@@ -6,7 +6,7 @@
   xsi:schemaLocation="http://commons.safris.org/dbcp.xsd http://commons.safris.org/dbcp.xsd">
   <jdbc>
     <url>jdbc:mysql://localhost/survey</url>
-    <driverClassName>com.sybase.jdbc3.jdbc.SybDriver</driverClassName>
+    <driverClassName>com.mysql.jdbc.Driver</driverClassName>
     <username>survey</username>
     <password>survey</password>
     <loginTimeout>-1</loginTimeout>
