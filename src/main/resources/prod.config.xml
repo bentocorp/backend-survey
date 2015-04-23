@@ -4,14 +4,14 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://resource.bentonow.com/survey/config.xsd config.xsd">
   
-  <debug externalResourcesAccess="true">
+  <debug externalResourcesAccess="false">
     <logging global="FINER"/>
   </debug>
   
-  <server host="localhost" port="8080"/>
+  <server host="survey.bentonow.com" port="443"/>
   
   <admin>
-    <credentials username="admin" password="admin"/>
+    <credentials username="admin" password="Fy1jbz9jqh"/>
   </admin>
   
   <webApi>
@@ -26,24 +26,22 @@
       <start minutesBeforeNow="1440"/>
       <end minutesBeforeNow="90"/>
     </match>
-    <execute every="10" xsi:type="seconds"/>
+    <execute every="10" xsi:type="minutes" begin="0"/>
   </worker>
   
   <mail>
     <server host="smtp.mailgun.org" port="465" protocol="smtps">
       <credentials username="postmaster@mg.bentonow.com" password="45ca46a82cd8b6e3ae4873bcb03c0cad"/>
     </server>
-    <message from="noreply@bentonow.com" subject="Bento Experience Survey">
-      <override to="seva@safris.com"/>
-    </message>
+    <message from="noreply@bentonow.com" subject="Bento Experience Survey"/>
   </mail>
   
   <dbcp xmlns="http://commons.safris.org/dbcp.xsd" name="survey">
     <jdbc>
-      <url>jdbc:mysql://localhost/survey</url>
+      <url>jdbc:mysql://bento-prod-db1.cehcqzecegos.us-west-2.rds.amazonaws.com/survey</url>
       <driverClassName>com.mysql.jdbc.Driver</driverClassName>
       <username>survey</username>
-      <password>xqTMy2FluQ</password>
+      <password>xqTMy2FluQ</password> 
       <loginTimeout>-1</loginTimeout>
     </jdbc>
     <default>

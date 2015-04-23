@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,10 +13,10 @@ import java.util.logging.Logger;
 
 public class MealSurvey extends Entity {
   private static final Logger logger = Logger.getLogger(MealSurvey.class.getName());
-  private static final Map<String,MealSurvey> mealIdToMealSurvey = new HashMap<String,MealSurvey>();
+  private static final Map<Integer,MealSurvey> mealIdToMealSurvey = new HashMap<Integer,MealSurvey>();
 
-  public static MealSurvey lookupMealSurvey(final String mealId) throws SQLException {
-    logger.info(mealId);
+  public static MealSurvey lookupMealSurvey(final int mealId) throws SQLException {
+    logger.info("" + mealId);
     MealSurvey mealSurvey = mealIdToMealSurvey.get(mealId);
     if (mealSurvey != null)
       return mealSurvey;
@@ -26,18 +27,24 @@ public class MealSurvey extends Entity {
 
       try (
         final Connection connection = getConnection();
-        final PreparedStatement statement = connection.prepareStatement("SELECT ms.*, ds.* FROM meal_survey ms, dish_survey ds WHERE ms.meal_id = ? AND ms.meal_id = ds.meal_id");
+        final PreparedStatement statement = connection.prepareStatement("SELECT ms.*, ds.* FROM meal_survey ms LEFT JOIN dish_survey ds ON ms.meal_id = ds.meal_id WHERE ms.meal_id = ?");
       ) {
-        statement.setString(1, mealId);
+        statement.setInt(1, mealId);
         final ResultSet resultSet = statement.executeQuery();
         while (resultSet.next()) {
           if (mealSurvey == null) {
-            final int mealRating = resultSet.getInt(2);
+            Integer mealRating = resultSet.getInt(2);
+            if (resultSet.wasNull())
+              mealRating = null;
+
             final String mealComment = resultSet.getString(3);
             mealIdToMealSurvey.put(mealId, mealSurvey = new MealSurvey(mealId, mealRating, mealComment, new ArrayList<DishSurvey>()));
           }
 
           final int dishId = resultSet.getInt(5);
+          if (resultSet.wasNull())
+            continue;
+
           final int dishRating = resultSet.getInt(6);
           final String dishComment = resultSet.getString(7);
           mealSurvey.dishSurveys.add(new DishSurvey(mealId, dishId, dishRating, dishComment));
@@ -48,7 +55,7 @@ public class MealSurvey extends Entity {
     }
   }
 
-  public static MealSurvey insert(final String mealId, final int rating, String comment, final List<DishSurvey> dishSurveys) throws SQLException {
+  public static MealSurvey insert(final int mealId, final Integer rating, String comment, final List<DishSurvey> dishSurveys) throws SQLException {
     comment = comment != null ? comment.trim() : "";
 
     logger.info(mealId + "...");
@@ -65,15 +72,24 @@ public class MealSurvey extends Entity {
         final PreparedStatement mealSurveyStatement = connection.prepareStatement("INSERT INTO meal_survey VALUES (?, ?, ?)");
         final PreparedStatement dishSurveyStatement = connection.prepareStatement("INSERT INTO dish_survey VALUES (?, ?, ?, ?)");
       ) {
-        mealSurveyStatement.setString(1, mealId);
-        mealSurveyStatement.setInt(2, rating);
+        mealSurveyStatement.setInt(1, mealId);
+        if (rating != null)
+          mealSurveyStatement.setInt(2, rating);
+        else
+          mealSurveyStatement.setNull(2, Types.INTEGER);
         mealSurveyStatement.setString(3, comment);
-        if (mealSurveyStatement.executeUpdate() != 1)
-          return null;
+        try {
+          if (mealSurveyStatement.executeUpdate() != 1)
+            return null;
+        }
+        catch (final SQLException e) {
+          if (e.getErrorCode() == 1062)
+            return null;
+        }
 
         mealIdToMealSurvey.put(mealId, mealSurvey = new MealSurvey(mealId, rating, comment, dishSurveys));
         for (final DishSurvey dishSurvey : mealSurvey.dishSurveys) {
-          dishSurveyStatement.setString(1, mealId);
+          dishSurveyStatement.setInt(1, mealId);
           dishSurveyStatement.setInt(2, dishSurvey.dishId);
           dishSurveyStatement.setInt(3, dishSurvey.rating);
           dishSurveyStatement.setString(4, dishSurvey.comment);
@@ -87,12 +103,12 @@ public class MealSurvey extends Entity {
     }
   }
 
-  public final String mealId;
-  public final int rating;
+  public final int mealId;
+  public final Integer rating;
   public final String comment;
   public final List<DishSurvey> dishSurveys;
 
-  private MealSurvey(final String mealId, final int rating, final String comment, final List<DishSurvey> dishSurveys) {
+  private MealSurvey(final int mealId, final Integer rating, final String comment, final List<DishSurvey> dishSurveys) {
     this.mealId = mealId;
     this.rating = rating;
     this.comment = comment != null && comment.length() > 0 ? comment : null;

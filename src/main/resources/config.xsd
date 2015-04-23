@@ -3,7 +3,10 @@
   elementFormDefault="qualified"
   targetNamespace="http://resource.bentonow.com/survey/config.xsd"
   xmlns:cf="http://resource.bentonow.com/survey/config.xsd"
+  xmlns:dbcp="http://commons.safris.org/dbcp.xsd"
   xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  
+  <xs:import namespace="http://commons.safris.org/dbcp.xsd" schemaLocation="http://commons.safris.org/dbcp.xsd"/>
   
   <xs:simpleType name="email"> 
     <xs:restriction base="xs:string"> 
@@ -607,8 +610,8 @@
           <xs:attribute name="protocol" use="required">
             <xs:simpleType>
               <xs:restriction base="xs:NCName">
-                <xs:enumeration value="SMTP"/>
-                <xs:enumeration value="SMTPS"/>
+                <xs:enumeration value="smtp"/>
+                <xs:enumeration value="smtps"/>
               </xs:restriction>
             </xs:simpleType>
           </xs:attribute>
@@ -827,6 +830,7 @@
         <xs:element name="webApi" type="cf:webApi"/>
         <xs:element name="worker" type="cf:worker"/>
         <xs:element name="mail" type="cf:mail"/>
+        <xs:element ref="dbcp:dbcp"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>

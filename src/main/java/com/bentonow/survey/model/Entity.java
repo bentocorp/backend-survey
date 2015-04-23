@@ -6,24 +6,21 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import org.safris.commons.dbcp.DataSources;
-import org.safris.commons.dbcp.dbcp_dbcp;
 import org.safris.commons.lang.Equals;
 import org.safris.commons.lang.HashCodes;
-import org.safris.commons.lang.Resources;
 import org.safris.commons.lang.ToStrings;
 import org.safris.commons.sql.ConnectionProxy;
-import org.safris.xml.generator.compiler.runtime.Bindings;
-import org.xml.sax.InputSource;
+
+import com.bentonow.survey.Config;
 
 public abstract class Entity {
   private static final DataSource dataSource;
 
   static {
     try {
-      final dbcp_dbcp dbcp = (dbcp_dbcp)Bindings.parse(new InputSource(Resources.getResource("dbcp.xml").getURL().openStream()));
-      dataSource = DataSources.createDataSource(dbcp);
+      dataSource = DataSources.createDataSource(Config.getConfig().dbcp_dbcp(0));
     }
-    catch (final Exception e) {
+    catch (final SQLException e) {
       throw new ExceptionInInitializerError(e);
     }
   }

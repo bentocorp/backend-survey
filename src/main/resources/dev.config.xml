@@ -4,14 +4,14 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://resource.bentonow.com/survey/config.xsd config.xsd">
   
-  <debug externalResourcesAccess="true">
+  <debug externalResourcesAccess="false">
     <logging global="FINER"/>
   </debug>
   
-  <server host="localhost" port="8080"/>
+  <server host="dev.survey.bentonow.com" port="80"/>
   
   <admin>
-    <credentials username="admin" password="admin"/>
+    <credentials username="admin" password="2FluQxqTMy"/>
   </admin>
   
   <webApi>
@@ -26,7 +26,7 @@
       <start minutesBeforeNow="1440"/>
       <end minutesBeforeNow="90"/>
     </match>
-    <execute every="10" xsi:type="seconds"/>
+    <execute every="1" xsi:type="minutes" begin="0"/>
   </worker>
   
   <mail>
@@ -40,7 +40,7 @@
   
   <dbcp xmlns="http://commons.safris.org/dbcp.xsd" name="survey">
     <jdbc>
-      <url>jdbc:mysql://localhost/survey</url>
+      <url>jdbc:mysql://bento-dev-db1.cehcqzecegos.us-west-2.rds.amazonaws.com/survey</url>
       <driverClassName>com.mysql.jdbc.Driver</driverClassName>
       <username>survey</username>
       <password>xqTMy2FluQ</password>

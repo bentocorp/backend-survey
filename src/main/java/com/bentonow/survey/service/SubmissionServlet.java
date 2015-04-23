@@ -30,9 +30,10 @@ public class SubmissionServlet extends TemplatedServlet {
     log(request.getParameterMap().toString());
 
     String content = template[0];
-    final String mealId = request.getParameter("i");
+    final int mealId = Integer.parseInt(request.getParameter("i"));
     try {
-      final int mealRating = Integer.parseInt(request.getParameter("r"));
+      final String mealRatingParam = request.getParameter("r");
+      final Integer mealRating = mealRatingParam != null ? Integer.parseInt(mealRatingParam) : null;
       if (MealSurvey.lookupMealSurvey(mealId) == null) {
         final String mealComment = request.getParameter("c");
         final List<DishSurvey> dishSurveys = new ArrayList<DishSurvey>();
@@ -52,7 +53,7 @@ public class SubmissionServlet extends TemplatedServlet {
         log("MealSurvey with id " + mealId + " already submitted... skipping..");
       }
 
-      if (mealRating > 8)
+      if (mealRating == null || mealRating > 8)
         content = content.replace("<!-- yelp -->", template[1]);
     }
     catch (final NumberFormatException e) {
