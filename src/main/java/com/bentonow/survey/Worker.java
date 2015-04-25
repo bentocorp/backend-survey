@@ -18,7 +18,6 @@ import com.bentonow.resource.survey.config.$cf_execute;
 import com.bentonow.resource.survey.config.$cf_hours;
 import com.bentonow.resource.survey.config.$cf_minutes;
 import com.bentonow.resource.survey.config.$cf_seconds;
-import com.bentonow.resource.survey.config.$cf_webApi;
 import com.bentonow.resource.survey.config.$cf_worker;
 import com.bentonow.survey.model.Meal;
 

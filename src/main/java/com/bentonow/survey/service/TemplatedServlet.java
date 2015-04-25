@@ -11,6 +11,8 @@ import org.safris.commons.lang.Resource;
 import org.safris.commons.lang.Resources;
 import org.safris.commons.net.InetAddresses;
 
+import com.bentonow.resource.survey.config.$cf_http;
+import com.bentonow.resource.survey.config.$cf_https;
 import com.bentonow.resource.survey.config.$cf_server;
 
 @SuppressWarnings("serial")
@@ -26,12 +28,12 @@ public abstract class TemplatedServlet extends HttpServlet {
         if (serverUrl == null) {
           final int port = config._port$().text();
           serverUrl = !config._host$().isNull() ? config._host$().text() : InetAddresses.toStringIP(InetAddress.getLocalHost());
-          if (port == 80)
-            serverUrl = "http://" + serverUrl;
-          else if (port == 443)
-            serverUrl = "https://" + serverUrl;
+          if (config instanceof $cf_http)
+            serverUrl = port == 80 ? "http://" + serverUrl : "http://" + serverUrl + ":" + port;
+          else if (config instanceof $cf_https)
+            serverUrl = port == 443 ? "https://" + serverUrl : "https://" + serverUrl + ":" + port;
           else
-            serverUrl = "http://" + serverUrl + ":" + port;
+            throw new Error("Unexpected server type: " + config.name());
         }
       }
     }

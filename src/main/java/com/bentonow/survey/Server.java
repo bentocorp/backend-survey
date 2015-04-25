@@ -14,6 +14,12 @@ import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
+import org.eclipse.jetty.server.SecureRequestCustomizer;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -21,9 +27,12 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.security.Credential;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.safris.commons.cli.Options;
 import org.safris.commons.lang.Resources;
 
+import com.bentonow.resource.survey.config.$cf_http;
+import com.bentonow.resource.survey.config.$cf_https;
 import com.bentonow.resource.survey.config.$cf_logging;
 import com.bentonow.resource.survey.config.cf_config;
 import com.bentonow.survey.service.AdminServlet;
@@ -53,7 +62,8 @@ public class Server {
           Logger.getLogger(logger._name$().text()).setLevel(Level.parse(logger._level$().text()));
     }
 
-    final org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server(config._server(0)._port$().text());
+    final org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server();
+    server.setConnectors(new Connector[] {makeConnector(server, config)});
 
     final ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
     addAuthRealm(servletContextHandler, config._admin(0)._credentials(0)._username$().text(), config._admin(0)._credentials(0)._password$().text(), "Restricted", "/a");
@@ -89,6 +99,28 @@ public class Server {
     server.join();
   }
 
+  private static Connector makeConnector(final org.eclipse.jetty.server.Server server, final cf_config config) {
+    if (config._server(0) instanceof $cf_http) {
+      final ServerConnector connector = new ServerConnector(server);
+      connector.setPort(config._server(0)._port$().text());
+      return connector;
+    }
+
+    final $cf_https httpsConfig = ($cf_https)config._server(0);
+
+    final HttpConfiguration https = new HttpConfiguration();
+    https.addCustomizer(new SecureRequestCustomizer());
+
+    final SslContextFactory sslContextFactory = new SslContextFactory();
+    sslContextFactory.setKeyStorePath(Resources.getResource(httpsConfig._keystore(0)._path$().text()).getURL().toExternalForm());
+    sslContextFactory.setKeyStorePassword(httpsConfig._keystore(0)._password$().text());
+//    sslContextFactory.setKeyManagerPassword("123456");
+
+    final ServerConnector connector = new ServerConnector(server, new SslConnectionFactory(sslContextFactory, "http/1.1"), new HttpConnectionFactory(https));
+    connector.setPort(config._server(0)._port$().text());
+    return connector;
+  }
+
   private static void addServlet(final ServletContextHandler handler, final HttpServlet servlet) {
     final WebServlet annotation = servlet.getClass().getAnnotation(WebServlet.class);
     if (annotation == null)
@@ -105,12 +137,16 @@ public class Server {
   private static final void addAuthRealm(final ServletContextHandler handler, final String username, final String password, final String realm, final String ... path) {
     logger.info(realm + ": " + Arrays.toString(path));
     HashLoginService loginService = new HashLoginService();
-    loginService.putUser(username, Credential.getCredential(password), new String[] {"user"});
+    loginService.putUser(username, Credential.getCredential(password), new String[] {
+      "user"
+    });
     loginService.setName(realm);
 
     final Constraint constraint = new Constraint();
     constraint.setName(Constraint.__BASIC_AUTH);
-    constraint.setRoles(new String[] {"user"});
+    constraint.setRoles(new String[] {
+      "user"
+    });
     constraint.setAuthenticate(true);
 
     final ConstraintSecurityHandler securityHandler = new ConstraintSecurityHandler();

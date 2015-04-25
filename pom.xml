@@ -9,6 +9,7 @@
   <name>${project.groupId}.${project.artifactId}</name>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <keyStorePassword>bento1</keyStorePassword>
   </properties>
   <build>
     <finalName>survey</finalName>
@@ -21,6 +22,66 @@
       </resource>
     </resources>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.8</version>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <configuration>
+              <tasks>
+                <exec executable="sh" outputproperty="out" errorproperty="err">
+                  <arg value="-c"/>
+                  <arg value="ls -1r ${basedir}/src/main/ssl/*-*.crt | xargs -n 1 cat &gt;&gt; ${project.build.directory}/ca.pem"/>
+                </exec>
+                <echo message="sh: ${out} ${err}"/>
+                <exec executable="openssl" outputproperty="out" errorproperty="err">
+                  <arg value="pkcs12"/>
+                  <arg value="-export"/>
+                  <arg value="-chain"/>
+                  <arg value="-in"/>
+                  <arg value="${basedir}/src/main/ssl/*.bentonow.com.crt"/>
+                  <arg value="-inkey"/>
+                  <arg value="${basedir}/src/main/ssl/bento-ssl-private-key.pem"/>
+                  <arg value="-out"/>
+                  <arg value="${project.build.directory}/server.p12"/>
+                  <arg value="-name"/>
+                  <arg value="*.bentonow.com.crt"/>
+                  <arg value="-CAfile"/>
+                  <arg value="${basedir}/target/ca.pem"/>
+                  <arg value="-caname"/>
+                  <arg value="root"/>
+                  <arg value="-passout"/>
+                  <arg value="pass:${keyStorePassword}"/>
+                </exec>
+                <echo message="openssl: ${out} ${err}"/>
+                <exec executable="keytool" outputproperty="out" errorproperty="err">
+                  <arg value="-importkeystore"/>
+                  <arg value="-deststorepass"/>
+                  <arg value="${keyStorePassword}"/>
+                  <arg value="-destkeypass"/>
+                  <arg value="${keyStorePassword}"/>
+                  <arg value="-destkeystore"/>
+                  <arg value="${project.build.directory}/classes/keystore.jks"/>
+                  <arg value="-srckeystore"/>
+                  <arg value="${project.build.directory}/server.p12"/>
+                  <arg value="-srcstoretype"/>
+                  <arg value="PKCS12"/>
+                  <arg value="-srcstorepass"/>
+                  <arg value="${keyStorePassword}"/>
+                  <arg value="-alias"/>
+                  <arg value="*.bentonow.com.crt"/>
+                </exec>
+                <echo message="keytool: ${out} ${err}"/>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
@@ -174,6 +235,21 @@
           <configuration>
             <lifecycleMappingMetadata>
               <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <versionRange>[0.0,)</versionRange>
+                    <goals>
+                      <goal>run</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute>
+                      <runOnIncremental>false</runOnIncremental>
+                    </execute>
+                  </action>
+                </pluginExecution>
                 <pluginExecution>
                   <pluginExecutionFilter>
                     <groupId>org.apache.maven.plugins</groupId>

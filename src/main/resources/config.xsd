@@ -588,9 +588,30 @@
     </xs:restriction>
   </xs:simpleType>
   
-  <xs:complexType name="server">
+  <xs:complexType name="server" abstract="true">
     <xs:attribute name="host" type="xs:token"/>
     <xs:attribute name="port" type="cf:port" use="required"/>
+  </xs:complexType>
+  
+  <xs:complexType name="http">
+    <xs:complexContent>
+      <xs:extension base="cf:server"/>
+    </xs:complexContent>
+  </xs:complexType>
+  
+  <xs:complexType name="https">
+    <xs:complexContent>
+      <xs:extension base="cf:server">
+        <xs:sequence>
+          <xs:element name="keystore">
+            <xs:complexType>
+              <xs:attribute name="path" type="xs:token" use="required"/>
+              <xs:attribute name="password" type="xs:token" use="required"/>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   
   <xs:complexType name="mail">

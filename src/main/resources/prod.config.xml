@@ -8,7 +8,9 @@
     <logging global="FINER"/>
   </debug>
   
-  <server host="survey.bentonow.com" port="443"/>
+  <server xsi:type="https" host="survey.bentonow.com" port="443">
+    <keystore path="keystore.jks" password="bento1"/>
+  </server>
   
   <admin>
     <credentials username="admin" password="Fy1jbz9jqh"/>
