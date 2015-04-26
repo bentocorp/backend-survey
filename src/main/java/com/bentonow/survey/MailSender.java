@@ -27,7 +27,7 @@ public class MailSender {
   private final Mail.Credentials credentials;
   private final String from;
   private final String subject;
-  private final String toOverride;
+  private final String[] toOverride;
 
   public MailSender(final $cf_server serverConfig, final $cf_mail mailConfig) throws IOException {
     final Resource containerResource = Resources.getResource("container.html");
@@ -40,7 +40,7 @@ public class MailSender {
     credentials = new Mail.Credentials(mailConfig._server(0)._credentials(0)._username$().text(), mailConfig._server(0)._credentials(0)._password$().text());
     from = mailConfig._message(0)._from$().text();
     subject = mailConfig._message(0)._subject$().text();
-    toOverride = !mailConfig._message(0)._override(0).isNull() ? mailConfig._message(0)._override(0)._to$().text() : null;
+    toOverride = !mailConfig._message(0)._override(0).isNull() ? mailConfig._message(0)._override(0)._to$().text().toArray(new String[mailConfig._message(0)._override(0)._to$().text().size()]) : null;
   }
 
   public void send(final List<Meal> meals) {
@@ -58,8 +58,8 @@ public class MailSender {
           questions += "\n" + template.replace("${dishId}", "" + dish.id).replace("${imageUrl}", dish.imageUrl).replace("${name}", dish.name).replace("${itemNo}", "" + j);
         }
 
-        final String to = toOverride != null ? toOverride : meal.email;
-        final String content = container.replace("${mealId}", "" + meal.id).replace("${email}", to).replace("<!-- items-data -->", questions.substring(1)).replace(" id=\"items-container\"", "");
+        final String[] to = toOverride != null ? toOverride : new String[] {meal.email};
+        final String content = container.replace("${mealId}", "" + meal.id).replace("${email}", to[0]).replace("<!-- items-data -->", questions.substring(1)).replace(" id=\"items-container\"", "");
         messages[i] = new Mail.Message(subject, new MimeContent(content, "text/html"), from, to) {
           public void success() {
             meal.sent(true);

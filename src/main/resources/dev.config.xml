@@ -36,7 +36,7 @@
       <credentials username="postmaster@mg.bentonow.com" password="45ca46a82cd8b6e3ae4873bcb03c0cad"/>
     </server>
     <message from="noreply@bentonow.com" subject="Bento Experience Survey">
-      <override to="seva@safris.com"/>
+      <override to="seva@safris.com feedback@bentonow.com"/>
     </message>
   </mail>
   
