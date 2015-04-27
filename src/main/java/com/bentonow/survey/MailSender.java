@@ -55,7 +55,7 @@ public class MailSender {
         String questions = "";
         for (int j = 0; j < meal.dishes.size(); j++) {
           final Dish dish = meal.dishes.get(j);
-          questions += "\n" + template.replace("${dishId}", "" + dish.id).replace("${imageUrl}", dish.imageUrl).replace("${name}", dish.name).replace("${itemNo}", "" + j);
+          questions += "\n" + template.replace("${dishId}", "" + dish.id).replace("${imageUrl}", dish.imageUrl != null ? dish.imageUrl : "").replace("${name}", dish.name).replace("${itemNo}", "" + j);
         }
 
         final String[] to = toOverride != null ? toOverride : new String[] {meal.email};

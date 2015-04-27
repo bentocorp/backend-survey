@@ -214,6 +214,16 @@
     <xs:all>
       <xs:element name="parameters" type="cf:parameters" minOccurs="0"/>
     </xs:all>
+    <xs:attribute name="protocol" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="http"/>
+          <xs:enumeration value="https"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="host" type="dt:host" use="required"/>
+    <xs:attribute name="ignoreSecurityErrors" type="xs:boolean" use="required"/>
   </xs:complexType>
   
   <xs:complexType name="worker">

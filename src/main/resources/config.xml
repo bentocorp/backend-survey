@@ -14,7 +14,7 @@
     <credentials username="admin" password="admin"/>
   </admin>
   
-  <webApi>
+  <webApi protocol="https" host="dev.api.bentonow.com" ignoreSecurityErrors="true">
     <parameters>
       <parameter name="api_username" value="seva_kjHgbmAq*7%40%235_%25KLbH"/>
       <parameter name="api_password" value="%245y%2410%24Ldvko.Fby1IhGHl16njuLOIbWlwz9TvMbBjqrph%2FlJuYIQxqTMyuG.86"/>

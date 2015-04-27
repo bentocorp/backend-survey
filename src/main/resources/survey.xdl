@@ -8,7 +8,7 @@
     <column name="name" xsi:type="varchar" length="255" null="false"/>
     <column name="description" xsi:type="varchar" length="255" null="false"/>
     <column name="type" xsi:type="enum" values="main side" null="false"/>
-    <column name="image_url" xsi:type="varchar" length="255" null="false"/>
+    <column name="image_url" xsi:type="varchar" length="255" null="true"/>
     <constraints>
       <primaryKey>
         <column name="id"/>

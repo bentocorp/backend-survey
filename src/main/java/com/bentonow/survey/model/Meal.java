@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,6 +20,8 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.logging.Logger;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import org.safris.commons.util.TieredRangeFetcher;
 
@@ -123,7 +124,7 @@ public class Meal extends Entity {
     return cacheTier.fetch(from, to, null).values();
   }
 
-  private static final String mealServiceUrl = "https://api.bentonow.com/extapi/reports/survey/range/${fromDate}/${endDate}?" + Config.getParameters(Config.getConfig()._webApi(0)._parameters(0));
+  private static final String mealServiceUrl = Config.getConfig()._webApi(0)._protocol$().text() + "://" + Config.getConfig()._webApi(0)._host$().text() + "/extapi/reports/survey/range/${fromDate}/${endDate}?" + Config.getParameters(Config.getConfig()._webApi(0)._parameters(0));
 
   private static final TieredRangeFetcher<Long,Meal> webServiceTier = new TieredRangeFetcher<Long,Meal>(null) {
     private final Long[] range = new Long[] {Long.MIN_VALUE, Long.MAX_VALUE};
@@ -138,7 +139,10 @@ public class Meal extends Entity {
       try {
         final URL serviceUrl = new URL(mealServiceUrl.replace("${fromDate}", URLEncoder.encode(dateFormatLocal.get().format(from), "UTF-8")).replace("${endDate}", URLEncoder.encode(dateFormatLocal.get().format(to - 1000), "UTF-8"))); // remove 1 second from the to, becasue the web-service API is (from, to) spec
         logger.info(serviceUrl.toExternalForm());
-        final URLConnection connection = serviceUrl.openConnection();
+        final HttpsURLConnection connection = (HttpsURLConnection)serviceUrl.openConnection();
+        if (Config.getConfig()._webApi(0)._ignoreSecurityErrors$().text())
+          connection.setHostnameVerifier(hostnameVerifier);
+
         final InputStream in = connection.getInputStream();
         final JsonElement json = new JsonParser().parse(new InputStreamReader(in));
         final JsonArray array = json.getAsJsonArray();
