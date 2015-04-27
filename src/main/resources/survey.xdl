@@ -74,7 +74,7 @@
     <column name="dish_id" xsi:type="mediumint" precision="8" unsigned="true" null="false">
       <foreignKey references="dish" column="id"/>
     </column>
-    <column name="rating" xsi:type="tinyint" precision="1" unsigned="true" null="false"/>
+    <column name="rating" xsi:type="tinyint" precision="1" unsigned="true" null="true"/>
     <column name="comment" xsi:type="varchar" length="2045" null="false"/>
     <!--<constraints>
       <primaryKey>

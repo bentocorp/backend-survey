@@ -81,6 +81,7 @@
             </xs:element>
           </xs:all>
           <xs:attribute name="from" type="dt:email" use="required"/>
+          <xs:attribute name="fromName" type="xs:string" use="optional"/>
           <xs:attribute name="subject" type="xs:string" use="required"/>
         </xs:complexType>
       </xs:element>

@@ -45,7 +45,10 @@ public class MealSurvey extends Entity {
           if (resultSet.wasNull())
             continue;
 
-          final int dishRating = resultSet.getInt(6);
+          Integer dishRating = resultSet.getInt(6);
+          if (resultSet.wasNull())
+            dishRating = null;
+
           final String dishComment = resultSet.getString(7);
           mealSurvey.dishSurveys.add(new DishSurvey(mealId, dishId, dishRating, dishComment));
         }
@@ -91,7 +94,10 @@ public class MealSurvey extends Entity {
         for (final DishSurvey dishSurvey : mealSurvey.dishSurveys) {
           dishSurveyStatement.setInt(1, mealId);
           dishSurveyStatement.setInt(2, dishSurvey.dishId);
-          dishSurveyStatement.setInt(3, dishSurvey.rating);
+          if (dishSurvey.rating != null)
+            dishSurveyStatement.setInt(3, dishSurvey.rating);
+          else
+            dishSurveyStatement.setNull(3, Types.TINYINT);
           dishSurveyStatement.setString(4, dishSurvey.comment);
           dishSurveyStatement.addBatch();
         }

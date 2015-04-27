@@ -44,7 +44,7 @@ public class SubmissionServlet extends TemplatedServlet {
         for (int i = 0; (dishId = request.getParameter("d" + i + "i")) != null; i++) {
           dishRating = request.getParameter("d" + i + "r");
           dishComment = request.getParameter("d" + i + "c");
-          dishSurveys.add(new DishSurvey(mealId, Integer.parseInt(dishId), Integer.parseInt(dishRating), dishComment));
+          dishSurveys.add(new DishSurvey(mealId, Integer.parseInt(dishId), dishRating != null ? Integer.parseInt(dishRating) : null, dishComment));
         }
 
         MealSurvey.insert(mealId, mealRating, mealComment, dishSurveys);
