@@ -25,10 +25,10 @@
   
   <worker>
     <match field="createdOn">
-      <start minutesBeforeNow="1440"/>
+      <start minutesBeforeNow="0"/>
       <end minutesBeforeNow="90"/>
     </match>
-    <execute every="10" xsi:type="minutes" begin="0"/>
+    <execute every="30" xsi:type="minutes" begin="00"/>
   </worker>
   
   <mail>
