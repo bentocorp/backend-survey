@@ -35,7 +35,7 @@
     <server host="smtp.mailgun.org" port="465" protocol="smtps">
       <credentials username="postmaster@mg.bentonow.com" password="45ca46a82cd8b6e3ae4873bcb03c0cad"/>
     </server>
-    <message from="feedback@bentonow.com" subject="Bento Experience Survey"/>
+    <message from="feedback@bentonow.com" subject="Bento Survey"/>
   </mail>
   
   <dbcp xmlns="http://commons.safris.org/dbcp.xsd" name="survey">
