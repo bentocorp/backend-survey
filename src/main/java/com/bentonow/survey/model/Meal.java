@@ -52,7 +52,7 @@ public class Meal extends Entity {
 
       try (
         final Connection connection = getConnection();
-        final PreparedStatement statement = connection.prepareStatement("SELECT m.*, d.* FROM meal m, meal_dish md, dish d WHERE m.id = ? AND m.id = md.meal_id AND md.dish_id = d.id");
+        final PreparedStatement statement = connection.prepareStatement("SELECT m.*, d.* FROM meal m, meal_dish md, dish d WHERE m.id = ? AND m.id = md.meal_id AND md.dish_id = d.id ORDER BY d.type");
       ) {
         statement.setInt(1, mealId);
         final ResultSet resultSet = statement.executeQuery();
@@ -108,6 +108,12 @@ public class Meal extends Entity {
           }
         }
       }
+    }
+
+    // This means that there is no unsent data in the DB that would qualify to be fetched based on the "to" time
+    if (from >= to) {
+      logger.info("Earliest unsent, or latest sent surveys in the DB are prior to " + dateFormatLocal.get().format(from) + ". Thus, there is no unsent data in the DB that would qualify to be fetched based on the 'to' time of " + dateFormatLocal.get().format(to));
+      return null;
     }
 
     final Collection<Meal> meals = fetchMeals(from, to);
@@ -193,7 +199,7 @@ public class Meal extends Entity {
       logger.info("dbTier.select(" + dateFormatLocal.get().format(from) + ", " + dateFormatLocal.get().format(to) + ")");
       try (
         final Connection connection = getConnection();
-        final PreparedStatement statement = connection.prepareStatement("SELECT m.*, d.* FROM dish d, meal_dish md, meal m LEFT JOIN unsubscribed u ON u.email = m.email LEFT JOIN meal_survey ms ON ms.meal_id = m.id WHERE u.email IS NULL AND ms.meal_id IS NULL AND ? <= m.created_on AND m.created_on < ? AND m.id = md.meal_id AND md.dish_id = d.id ORDER BY m.created_on, m.order_id");
+        final PreparedStatement statement = connection.prepareStatement("SELECT m.*, d.* FROM dish d, meal_dish md, meal m LEFT JOIN unsubscribed u ON u.email = m.email LEFT JOIN meal_survey ms ON ms.meal_id = m.id WHERE u.email IS NULL AND ms.meal_id IS NULL AND ? <= m.created_on AND m.created_on < ? AND m.id = md.meal_id AND md.dish_id = d.id ORDER BY m.created_on, m.order_id, d.type");
       ) {
         statement.setTimestamp(1, new java.sql.Timestamp(from));
         statement.setTimestamp(2, new java.sql.Timestamp(to));

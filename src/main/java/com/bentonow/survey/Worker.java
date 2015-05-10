@@ -97,7 +97,7 @@ public class Worker implements Runnable {
     try {
       final long now = DateUtil.dropMilliseconds(System.currentTimeMillis());
       final List<Meal> meals = Meal.fetchUnsent(now - startMinutesBeforeNow * DateUtil.MILLISECONDS_IN_MINUTE, now - endMinutesBeforeNow * DateUtil.MILLISECONDS_IN_MINUTE);
-      if (meals.size() > 0)
+      if (meals != null && meals.size() > 0)
         sender.send(meals);
     }
     catch (final Exception e) {

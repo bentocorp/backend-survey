@@ -1,6 +1,7 @@
 package com.bentonow.survey;
 
 import java.io.File;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.logging.Handler;
@@ -95,6 +96,13 @@ public class Server {
     final MailSender command = new MailSender(config._server(0), config._mail(0));
     final Worker worker = new Worker(config._worker(0), command);
     worker.start();
+
+    Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+      public void uncaughtException(final Thread t, final Throwable e) {
+        command.sendException(e);
+        e.printStackTrace();
+      }
+    });
 
     server.join();
   }

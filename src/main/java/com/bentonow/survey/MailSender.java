@@ -11,6 +11,7 @@ import javax.mail.internet.InternetAddress;
 import org.safris.commons.io.Streams;
 import org.safris.commons.lang.Resource;
 import org.safris.commons.lang.Resources;
+import org.safris.commons.lang.Throwables;
 import org.safris.commons.net.mail.Mail;
 import org.safris.commons.net.mail.MimeContent;
 
@@ -76,6 +77,15 @@ public class MailSender {
     }
     catch (final MessagingException e) {
       logger.throwing(MailSender.class.getName(), "run", e);
+    }
+  }
+
+  public void sendException(final Throwable t) {
+    try {
+      server.send(credentials, new Mail.Message(subject, new MimeContent(Throwables.toString(t), "text/plain"), from, "seva@safris.com"));
+    }
+    catch (final MessagingException e) {
+      logger.throwing(getClass().getName(), e.getMessage(), e);
     }
   }
 }

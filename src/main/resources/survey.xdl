@@ -2,13 +2,13 @@
 <database name="survey"
   xmlns="http://xdb.safris.org/xdl.xsd"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://xdb.safris.org/xdl.xsd http://xdb.safris.org/xdl.xsd">
+  xsi:schemaLocation="http://xdb.safris.org/xdl.xsd file:/Users/seva/Work/safris/org/xdb/xdl/src/main/resources/xdl.xsd">
   <table name="dish">
-    <column name="id" xsi:type="mediumint" precision="8" unsigned="true" null="false"/>
-    <column name="name" xsi:type="varchar" length="255" null="false"/>
-    <column name="description" xsi:type="varchar" length="255" null="false"/>
+    <column name="id" xsi:type="integer" precision="8" unsigned="true" null="false"/>
+    <column name="name" xsi:type="char" variant="true" length="255" null="false"/>
+    <column name="description" xsi:type="char" variant="true" length="255" null="false"/>
     <column name="type" xsi:type="enum" values="main side" null="false"/>
-    <column name="image_url" xsi:type="varchar" length="255" null="true"/>
+    <column name="image_url" xsi:type="char" variant="true" length="255" null="false"/>
     <constraints>
       <primaryKey>
         <column name="id"/>
@@ -16,10 +16,10 @@
     </constraints>
   </table>
   <table name="meal">
-    <column name="id" xsi:type="mediumint" precision="8" unsigned="true" null="false"/>
-    <column name="order_id" xsi:type="mediumint" precision="8" unsigned="true" null="false"/>
+    <column name="id" xsi:type="integer" precision="8" unsigned="true" null="false"/>
+    <column name="order_id" xsi:type="integer" precision="8" unsigned="true" null="false"/>
     <column name="created_on" xsi:type="dateTime" null="false"/>
-    <column name="email" xsi:type="varchar" length="255" null="false"/>
+    <column name="email" xsi:type="char" variant="true" length="255" null="false"/>
     <column name="sent" xsi:type="boolean" null="false" default="false"/>
     <column name="skipped" xsi:type="boolean" null="false" default="false"/>
     <constraints>
@@ -29,13 +29,13 @@
     </constraints>
   </table>
   <table name="meal_dish">
-    <column name="meal_id" xsi:type="mediumint" precision="8" unsigned="true" null="false">
+    <column name="meal_id" xsi:type="integer" precision="8" unsigned="true" null="false">
       <foreignKey references="meal" column="id"/>
     </column>
-    <column name="dish_id" xsi:type="mediumint" precision="8" unsigned="true" null="false">
+    <column name="dish_id" xsi:type="integer" precision="8" unsigned="true" null="false">
       <foreignKey references="dish" column="id"/>
     </column>
-    <column name="quantity" xsi:type="tinyint" precision="1" unsigned="true" null="false"/>
+    <column name="quantity" xsi:type="integer" precision="1" unsigned="true" null="false"/>
     <constraints>
       <primaryKey>
         <column name="meal_id"/>
@@ -48,7 +48,7 @@
     <column name="range_to" xsi:type="dateTime" null="false"/>
   </table>
   <table name="unsubscribed">
-    <column name="email" xsi:type="varchar" length="255" null="false"/>
+    <column name="email" xsi:type="char" variant="true" length="255" null="false"/>
     <constraints>
       <primaryKey>
         <column name="email"/>
@@ -56,11 +56,11 @@
     </constraints>
   </table>
   <table name="meal_survey">
-    <column name="meal_id" xsi:type="mediumint" precision="8" unsigned="true" null="false">
+    <column name="meal_id" xsi:type="integer" precision="8" unsigned="true" null="false">
       <foreignKey references="meal" column="id"/>
     </column>
-    <column name="rating" xsi:type="tinyint" precision="1" unsigned="true" null="true"/>
-    <column name="comment" xsi:type="varchar" length="2045" null="false"/>
+    <column name="rating" xsi:type="integer" precision="1" unsigned="true" null="true"/>
+    <column name="comment" xsi:type="char" variant="true" length="2045" null="false"/>
     <constraints>
       <primaryKey>
         <column name="meal_id"/>
@@ -68,14 +68,14 @@
     </constraints>
   </table>
   <table name="dish_survey">
-    <column name="meal_id" xsi:type="mediumint" precision="8" unsigned="true" null="false">
+    <column name="meal_id" xsi:type="integer" precision="8" unsigned="true" null="false">
       <foreignKey references="meal_survey" column="meal_id"/>
     </column>
-    <column name="dish_id" xsi:type="mediumint" precision="8" unsigned="true" null="false">
+    <column name="dish_id" xsi:type="integer" precision="8" unsigned="true" null="false">
       <foreignKey references="dish" column="id"/>
     </column>
-    <column name="rating" xsi:type="tinyint" precision="1" unsigned="true" null="true"/>
-    <column name="comment" xsi:type="varchar" length="2045" null="false"/>
+    <column name="rating" xsi:type="integer" precision="1" unsigned="true" null="false"/>
+    <column name="comment" xsi:type="char" variant="true" length="2045" null="false"/>
     <!--<constraints>
       <primaryKey>
         <column name="meal_id"/>
