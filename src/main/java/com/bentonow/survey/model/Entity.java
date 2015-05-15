@@ -41,7 +41,7 @@ public abstract class Entity {
     return HashCodes.hashCode(this);
   }
 
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     return Equals.equals(this, obj);
   }
 

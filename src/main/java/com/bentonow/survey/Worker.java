@@ -100,8 +100,9 @@ public class Worker implements Runnable {
       if (meals != null && meals.size() > 0)
         sender.send(meals);
     }
-    catch (final Exception e) {
-      logger.throwing(MailSender.class.getName(), "run", e);
+    catch (final Throwable t) {
+      t.printStackTrace();
+      logger.throwing(MailSender.class.getName(), "run", t);
     }
   }
 }

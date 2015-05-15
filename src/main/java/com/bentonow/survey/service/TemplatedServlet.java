@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.logging.Logger;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.safris.commons.io.Streams;
 import org.safris.commons.lang.Resource;
@@ -52,5 +55,9 @@ public abstract class TemplatedServlet extends HttpServlet {
       final Resource resubscribeResource = Resources.getResource(template[i]);
       this.template[i] = filter(config, new String(Streams.getBytes(resubscribeResource.getURL().openStream())));
     }
+  }
+
+  protected final void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
+    doPost(request, response);
   }
 }

@@ -3,6 +3,7 @@ package com.bentonow.survey.service;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -22,29 +23,40 @@ public class SubmissionServlet extends TemplatedServlet {
     super(config, "thankyou.html", "yelp.html");
   }
 
-  protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
-    response.sendError(404);
-  }
-
   protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
     log(request.getParameterMap().toString());
 
-    String content = template[0];
-    final int mealId = Integer.parseInt(request.getParameter("i"));
-    try {
-      final String mealRatingParam = request.getParameter("r");
-      final Integer mealRating = mealRatingParam != null ? Integer.parseInt(mealRatingParam) : null;
-      if (MealSurvey.lookupMealSurvey(mealId) == null) {
-        final String mealComment = request.getParameter("c");
-        final List<DishSurvey> dishSurveys = new ArrayList<DishSurvey>();
+    int mealId = -1;
+    Integer mealRating = null;
+    String mealComment = null;
+    Enumeration<String> parameterNames = request.getParameterNames();
+    while (parameterNames.hasMoreElements()) {
+      final String parameter = parameterNames.nextElement();
+      if (parameter.startsWith("c")) {
+        mealId = Integer.parseInt(parameter.substring(1));
+        mealComment = request.getParameter(parameter);
+        final String ratingParam = request.getParameter("r" + mealId);
+        mealRating = ratingParam == null ? null : Integer.parseInt(ratingParam);
+        break;
+      }
+    }
 
-        String dishId;
+    String content = template[0];
+    try {
+      if (MealSurvey.lookupMealSurvey(mealId) == null) {
+        int dishId;
         String dishRating;
         String dishComment;
-        for (int i = 0; (dishId = request.getParameter("d" + i + "i")) != null; i++) {
-          dishRating = request.getParameter("d" + i + "r");
-          dishComment = request.getParameter("d" + i + "c");
-          dishSurveys.add(new DishSurvey(mealId, Integer.parseInt(dishId), dishRating != null ? Integer.parseInt(dishRating) : null, dishComment));
+        parameterNames = request.getParameterNames();
+        final List<DishSurvey> dishSurveys = new ArrayList<DishSurvey>();
+        while (parameterNames.hasMoreElements()) {
+          final String parameter = parameterNames.nextElement();
+          if (parameter.startsWith("d") && parameter.endsWith("c")) {
+            dishId = Integer.parseInt(parameter.substring(1, parameter.length() - 1));
+            dishRating = request.getParameter("d" + dishId + "r");
+            dishComment = request.getParameter(parameter);
+            dishSurveys.add(new DishSurvey(mealId, dishId, dishRating != null ? Integer.parseInt(dishRating) : null, dishComment));
+          }
         }
 
         MealSurvey.insert(mealId, mealRating, mealComment, dishSurveys);

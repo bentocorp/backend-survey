@@ -40,8 +40,7 @@
               <tr style="color: #666">
                 <td style="padding: 20px 10px; background-color: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,.2);">You have been successfully unsubscribed from email communications.<br/>
                 If you did this in error, you may re-subscribe by clicking the button below.<br/><br/>
-                <form action="${serverUrl}/r" method="post">
-                  <input type="hidden" name="e" value="${email}">
+                <form action="${serverUrl}/r/${email}" method="post">
                   <button class="btn btn-large" style="color: #fff; background-color: #8abb5a;" type="submit">Re-subscribe</button></td>
                 </form>
               </tr>
