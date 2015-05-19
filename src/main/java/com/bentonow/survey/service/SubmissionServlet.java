@@ -25,24 +25,23 @@ public class SubmissionServlet extends TemplatedServlet {
 
   protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
     log(request.getParameterMap().toString());
-
-    int mealId = -1;
-    Integer mealRating = null;
-    String mealComment = null;
-    Enumeration<String> parameterNames = request.getParameterNames();
-    while (parameterNames.hasMoreElements()) {
-      final String parameter = parameterNames.nextElement();
-      if (parameter.startsWith("c")) {
-        mealId = Integer.parseInt(parameter.substring(1));
-        mealComment = request.getParameter(parameter);
-        final String ratingParam = request.getParameter("r" + mealId);
-        mealRating = ratingParam == null ? null : Integer.parseInt(ratingParam);
-        break;
-      }
-    }
-
     String content = template[0];
     try {
+      int mealId = -1;
+      Integer mealRating = null;
+      String mealComment = null;
+      Enumeration<String> parameterNames = request.getParameterNames();
+      while (parameterNames.hasMoreElements()) {
+        final String parameter = parameterNames.nextElement();
+        if (parameter.startsWith("c")) {
+          mealId = Integer.parseInt(parameter.substring(1));
+          mealComment = request.getParameter(parameter);
+          final String ratingParam = request.getParameter("r" + mealId);
+          mealRating = ratingParam == null ? null : Integer.parseInt(ratingParam);
+          break;
+        }
+      }
+
       if (MealSurvey.lookupMealSurvey(mealId) == null) {
         int dishId;
         String dishRating;
