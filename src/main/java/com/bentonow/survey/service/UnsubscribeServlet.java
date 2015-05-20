@@ -1,6 +1,7 @@
 package com.bentonow.survey.service;
 
 import java.io.IOException;
+import java.sql.SQLIntegrityConstraintViolationException;
 
 import javax.mail.internet.InternetAddress;
 import javax.servlet.ServletException;
@@ -31,6 +32,9 @@ public class UnsubscribeServlet extends TemplatedServlet {
     try {
       new InternetAddress(email).validate();
       Subscription.unsubscribe(email);
+    }
+    catch (final SQLIntegrityConstraintViolationException e) {
+      log(email + " is already unsubscribed");
     }
     catch (final Exception e) {
       log(e.getMessage(), e);
