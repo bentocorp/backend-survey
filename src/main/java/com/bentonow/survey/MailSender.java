@@ -31,12 +31,12 @@ public class MailSender {
   private final String subject;
   private final String[] toOverride;
 
-  public MailSender(final $cf_server serverConfig, final $cf_mail mailConfig) throws IOException {
+  public MailSender(final $cf_mail mailConfig) throws IOException {
     final Resource containerResource = Resources.getResource("container.html");
-    container = TemplatedServlet.filter(serverConfig, new String(Streams.getBytes(containerResource.getURL().openStream())));
+    container = TemplatedServlet.filter(mailConfig, new String(Streams.getBytes(containerResource.getURL().openStream())));
 
     final Resource templateResource = Resources.getResource("template.html");
-    template = TemplatedServlet.filter(serverConfig, new String(Streams.getBytes(templateResource.getURL().openStream())));
+    template = TemplatedServlet.filter(mailConfig, new String(Streams.getBytes(templateResource.getURL().openStream())));
 
     server = Mail.Server.instance(Mail.Protocol.valueOf(mailConfig._server(0)._protocol$().text().toUpperCase()), mailConfig._server(0)._host$().text(), mailConfig._server(0)._port$().text());
     credentials = new Mail.Credentials(mailConfig._server(0)._credentials(0)._username$().text(), mailConfig._server(0)._credentials(0)._password$().text());

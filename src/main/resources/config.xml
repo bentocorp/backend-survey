@@ -8,7 +8,7 @@
     <logging global="FINER"/>
   </debug>
   
-  <server xsi:type="http" host="localhost" listenPort="8080" responsePort="8080"/>
+  <server xsi:type="http" port="8080"/>
   
   <admin>
     <credentials username="admin" password="admin"/>
@@ -36,6 +36,7 @@
     <message from="feedback@bentonow.com" fromName="Bento" subject="Bento Survey">
       <override to="seva@safris.com"/>
     </message>
+    <serviceDestination scheme="http" host="localhost" port="8080"/>
   </mail>
   
   <dbcp xmlns="http://commons.safris.org/dbcp.xsd" name="survey">

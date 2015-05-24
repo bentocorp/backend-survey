@@ -8,7 +8,7 @@
     <logging global="FINER"/>
   </debug>
   
-  <server xsi:type="http" host="survey.bentonow.com" listenPort="8081" responsePort="443"/>
+  <server xsi:type="http" port="8081"/>
   
   <admin>
     <credentials username="admin" password="Fy1jbz9jqh"/>
@@ -34,6 +34,7 @@
       <credentials username="postmaster@mg.bentonow.com" password="45ca46a82cd8b6e3ae4873bcb03c0cad"/>
     </server>
     <message from="feedback@bentonow.com" subject="Bento Survey"/>
+    <serviceDestination scheme="https" host="survey.bentonow.com" port="443"/>
   </mail>
   
   <dbcp xmlns="http://commons.safris.org/dbcp.xsd" name="survey">

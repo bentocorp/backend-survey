@@ -11,7 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.bentonow.resource.survey.config.$cf_server;
+import com.bentonow.resource.survey.config.cf_config;
 import com.bentonow.survey.model.DishSurvey;
 import com.bentonow.survey.model.MealSurvey;
 
@@ -19,7 +19,7 @@ import com.bentonow.survey.model.MealSurvey;
 public class SubmissionServlet extends TemplatedServlet {
   private static final long serialVersionUID = 6180095764961424067L;
 
-  public SubmissionServlet(final $cf_server config) throws IOException {
+  public SubmissionServlet(final cf_config config) throws IOException {
     super(config, "thankyou.html", "yelp.html");
   }
 

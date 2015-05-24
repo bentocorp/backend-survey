@@ -8,14 +8,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.bentonow.resource.survey.config.$cf_server;
+import com.bentonow.resource.survey.config.cf_config;
 import com.bentonow.survey.model.Subscription;
 
 @WebServlet(urlPatterns={"/r/*"})
 public class ResubscribeServlet extends TemplatedServlet {
   private static final long serialVersionUID = -5032490249230923435L;
 
-  public ResubscribeServlet(final $cf_server config) throws IOException {
+  public ResubscribeServlet(final cf_config config) throws IOException {
     super(config, "resubscribed.html");
   }
 

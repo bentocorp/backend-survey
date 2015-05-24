@@ -7,13 +7,11 @@
   xmlns:dbcp="http://commons.safris.org/dbcp.xsd"
   xmlns:xs="http://www.w3.org/2001/XMLSchema">
   
-  <xs:import namespace="http://commons.safris.org/datatypes.xsd" schemaLocation="http://commons.safris.org/datatypes.xsd"/>
+  <xs:import namespace="http://commons.safris.org/datatypes.xsd" schemaLocation="file:/Users/seva/Work/safris/org/commons/xml/src/main/resources/datatypes.xsd"/>
   <xs:import namespace="http://commons.safris.org/dbcp.xsd" schemaLocation="http://commons.safris.org/dbcp.xsd"/>
   
   <xs:complexType name="server" abstract="true">
-    <xs:attribute name="host" type="dt:host"/>
-    <xs:attribute name="listenPort" type="dt:port" use="required"/>
-    <xs:attribute name="responsePort" type="dt:port" use="required"/>
+    <xs:attribute name="port" type="dt:port" use="required"/>
   </xs:complexType>
   
   <xs:complexType name="http">
@@ -77,6 +75,13 @@
           <xs:attribute name="from" type="dt:email" use="required"/>
           <xs:attribute name="fromName" type="xs:string" use="optional"/>
           <xs:attribute name="subject" type="xs:string" use="required"/>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="serviceDestination">
+        <xs:complexType>
+          <xs:attribute name="scheme" type="dt:scheme" use="required"/>
+          <xs:attribute name="host" type="dt:host" use="required"/>
+          <xs:attribute name="port" type="dt:port" use="required"/>
         </xs:complexType>
       </xs:element>
     </xs:all>

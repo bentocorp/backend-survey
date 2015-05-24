@@ -8,7 +8,7 @@
     <logging global="FINER"/>
   </debug>
   
-  <server xsi:type="https" host="dev.survey.bentonow.com" listenPort="443" responsePort="443">
+  <server xsi:type="https" port="443">
     <keystore path="keystore.jks" password="bento1"/>
   </server>
   
@@ -38,6 +38,7 @@
     <message from="feedback@bentonow.com" fromName="Bento" subject="Bento Survey">
       <override to="seva@safris.com feedback@bentonow.com"/>
     </message>
+    <serviceDestination scheme="https" host="survey.dev.bentonow.com" port="443"/>
   </mail>
   
   <dbcp xmlns="http://commons.safris.org/dbcp.xsd" name="survey">

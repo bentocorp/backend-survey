@@ -69,14 +69,14 @@ public class Server {
     final ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
     addAuthRealm(servletContextHandler, config._admin(0)._credentials(0)._username$().text(), config._admin(0)._credentials(0)._password$().text(), "Restricted", "/a");
     addServlet(servletContextHandler, new AdminServlet());
-    addServlet(servletContextHandler, new ResubscribeServlet(config._server(0)));
-    addServlet(servletContextHandler, new SubmissionServlet(config._server(0)));
-    addServlet(servletContextHandler, new UnsubscribeServlet(config._server(0)));
+    addServlet(servletContextHandler, new ResubscribeServlet(config));
+    addServlet(servletContextHandler, new SubmissionServlet(config));
+    addServlet(servletContextHandler, new UnsubscribeServlet(config));
 
     final HandlerList handlerList = new HandlerList();
 
     if (!config._debug(0)._externalResourcesAccess$().isNull() && config._debug(0)._externalResourcesAccess$().text()) {
-      // FIXME: HACK: Why cannot I just get the "/" resource? In the IDE it works, but in the standalone jar, it does not
+      // FIXME: HACK: Why cannot I just get the "/" resource? In the IDE it works, but in the stand-alone jar, it does not
       final String configResourcePath = Resources.getResource("config.xml").getURL().toExternalForm();
       final URL rootResourceURL = new URL(configResourcePath.substring(0, configResourcePath.length() - "config.xml".length()));
 
@@ -93,7 +93,7 @@ public class Server {
 
     server.start();
 
-    final MailSender command = new MailSender(config._server(0), config._mail(0));
+    final MailSender command = new MailSender(config._mail(0));
     final Worker worker = new Worker(config._worker(0), command);
     worker.start();
 
@@ -110,7 +110,7 @@ public class Server {
   private static Connector makeConnector(final org.eclipse.jetty.server.Server server, final cf_config config) {
     if (config._server(0) instanceof $cf_http) {
       final ServerConnector connector = new ServerConnector(server);
-      connector.setPort(config._server(0)._listenPort$().text());
+      connector.setPort(config._server(0)._port$().text());
       return connector;
     }
 
@@ -125,7 +125,7 @@ public class Server {
 //    sslContextFactory.setKeyManagerPassword("123456");
 
     final ServerConnector connector = new ServerConnector(server, new SslConnectionFactory(sslContextFactory, "http/1.1"), new HttpConnectionFactory(https));
-    connector.setPort(config._server(0)._listenPort$().text());
+    connector.setPort(config._server(0)._port$().text());
     return connector;
   }
 

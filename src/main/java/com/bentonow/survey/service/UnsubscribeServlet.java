@@ -9,14 +9,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.bentonow.resource.survey.config.$cf_server;
+import com.bentonow.resource.survey.config.cf_config;
 import com.bentonow.survey.model.Subscription;
 
 @WebServlet(urlPatterns={"/u/*"})
 public class UnsubscribeServlet extends TemplatedServlet {
   private static final long serialVersionUID = -2949910435427053628L;
 
-  public UnsubscribeServlet(final $cf_server config) throws IOException {
+  public UnsubscribeServlet(final cf_config config) throws IOException {
     super(config, "unsubscribed.html");
   }
 
