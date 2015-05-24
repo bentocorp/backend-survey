@@ -29,14 +29,14 @@ public abstract class TemplatedServlet extends HttpServlet {
     if (serverUrl == null) {
       synchronized (mutex) {
         if (serverUrl == null) {
-          final int port = config._port$().text();
+          final int port = config._responsePort$().text();
           serverUrl = !config._host$().isNull() ? config._host$().text() : InetAddresses.toStringIP(InetAddress.getLocalHost());
-          if (config instanceof $cf_http)
-            serverUrl = port == 80 ? "http://" + serverUrl : "http://" + serverUrl + ":" + port;
-          else if (config instanceof $cf_https)
-            serverUrl = port == 443 ? "https://" + serverUrl : "https://" + serverUrl + ":" + port;
+          if (port == 443)
+            serverUrl = "https://" + serverUrl;
+          else if (port == 80)
+            serverUrl = "http://" + serverUrl;
           else
-            throw new Error("Unexpected server type: " + config.name());
+            serverUrl = "http://" + serverUrl + ":" + port;
         }
       }
     }

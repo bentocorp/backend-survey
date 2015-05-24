@@ -8,7 +8,7 @@
     <logging global="FINER"/>
   </debug>
   
-  <server xsi:type="http" host="survey.bentonow.com" port="8081"/>
+  <server xsi:type="http" host="survey.bentonow.com" listenPort="8081" responsePort="443"/>
   
   <admin>
     <credentials username="admin" password="Fy1jbz9jqh"/>

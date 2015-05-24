@@ -10,16 +10,10 @@
   <xs:import namespace="http://commons.safris.org/datatypes.xsd" schemaLocation="http://commons.safris.org/datatypes.xsd"/>
   <xs:import namespace="http://commons.safris.org/dbcp.xsd" schemaLocation="http://commons.safris.org/dbcp.xsd"/>
   
-  <xs:simpleType name="port">
-    <xs:restriction base="xs:int">
-      <xs:minInclusive value="1"/>
-      <xs:maxInclusive value="35535"/>
-    </xs:restriction>
-  </xs:simpleType>
-  
   <xs:complexType name="server" abstract="true">
-    <xs:attribute name="host" type="xs:token"/>
-    <xs:attribute name="port" type="cf:port" use="required"/>
+    <xs:attribute name="host" type="dt:host"/>
+    <xs:attribute name="listenPort" type="dt:port" use="required"/>
+    <xs:attribute name="responsePort" type="dt:port" use="required"/>
   </xs:complexType>
   
   <xs:complexType name="http">
@@ -55,8 +49,8 @@
               </xs:complexType>
             </xs:element>
           </xs:all>
-          <xs:attribute name="host" type="xs:token" use="required"/>
-          <xs:attribute name="port" type="cf:port" use="required"/>
+          <xs:attribute name="host" type="dt:host" use="required"/>
+          <xs:attribute name="port" type="dt:port" use="required"/>
           <xs:attribute name="protocol" use="required">
             <xs:simpleType>
               <xs:restriction base="xs:NCName">

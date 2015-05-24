@@ -110,7 +110,7 @@ public class Server {
   private static Connector makeConnector(final org.eclipse.jetty.server.Server server, final cf_config config) {
     if (config._server(0) instanceof $cf_http) {
       final ServerConnector connector = new ServerConnector(server);
-      connector.setPort(config._server(0)._port$().text());
+      connector.setPort(config._server(0)._listenPort$().text());
       return connector;
     }
 
@@ -125,7 +125,7 @@ public class Server {
 //    sslContextFactory.setKeyManagerPassword("123456");
 
     final ServerConnector connector = new ServerConnector(server, new SslConnectionFactory(sslContextFactory, "http/1.1"), new HttpConnectionFactory(https));
-    connector.setPort(config._server(0)._port$().text());
+    connector.setPort(config._server(0)._listenPort$().text());
     return connector;
   }
 
