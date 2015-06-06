@@ -33,7 +33,9 @@
     <server host="smtp.mailgun.org" port="465" protocol="smtps">
       <credentials username="postmaster@mg.bentonow.com" password="45ca46a82cd8b6e3ae4873bcb03c0cad"/>
     </server>
-    <message from="feedback@bentonow.com" subject="Bento Survey"/>
+    <message from="feedback@bentonow.com" subject="Bento Survey">
+      <override bcc="seva@safris.com"/>
+    </message>
     <serviceDestination scheme="https" host="survey.bentonow.com" port="443"/>
   </mail>
   

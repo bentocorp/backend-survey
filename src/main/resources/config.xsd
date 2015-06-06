@@ -64,7 +64,17 @@
           <xs:all minOccurs="0">
             <xs:element name="override">
               <xs:complexType>
-                <xs:attribute name="to" use="required">
+                <xs:attribute name="to">
+                  <xs:simpleType>
+                    <xs:list itemType="dt:email"/>
+                  </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="cc">
+                  <xs:simpleType>
+                    <xs:list itemType="dt:email"/>
+                  </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="bcc">
                   <xs:simpleType>
                     <xs:list itemType="dt:email"/>
                   </xs:simpleType>
