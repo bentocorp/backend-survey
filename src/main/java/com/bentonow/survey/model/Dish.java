@@ -8,7 +8,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.sql.Types;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -30,7 +32,7 @@ public class Dish extends Entity {
   private static final String dishServiceUrl = Config.getConfig()._webApi(0)._protocol$().text() + "://" + Config.getConfig()._webApi(0)._host$().text() + "/extapi/dish/${id}?" + Config.getParameters(Config.getConfig()._webApi(0)._parameters(0));
   private static final Map<Integer,Dish> idToDish = new HashMap<Integer,Dish>();
 
-  public static Dish create(final int id, final String name, final String description, final Type type, final String imageUrl) throws IOException, SQLException {
+  public static Dish create(final int id, final String name, final String description, final Type type, final String imageUrl, final Date createdOn) throws IOException, SQLException {
     logger.finest(id + "...");
     Dish instance = idToDish.get(id);
     if (instance != null)
@@ -41,19 +43,28 @@ public class Dish extends Entity {
       if (instance != null)
         return instance;
 
-      idToDish.put(id, instance = new Dish(id, name, description, type, imageUrl));
+      idToDish.put(id, instance = new Dish(id, name, description, type, imageUrl, createdOn));
       return instance;
     }
   }
 
+  private static Dish checkExpired(final int id) {
+    Dish instance = idToDish.get(id);
+    if (instance != null && instance.createdOn.getTime() > System.currentTimeMillis() - Config.getConfig()._db(0)._dishTTL$().text() * 60 * 60 * 1000)
+      return instance;
+
+    idToDish.remove(id);
+    return null;
+  }
+
   public static Dish fetch(final int id) throws IOException, SQLException {
     logger.finest("" + id);
-    Dish instance = idToDish.get(id);
+    Dish instance = checkExpired(id);
     if (instance != null)
       return instance;
 
     synchronized (idToDish) {
-      instance = idToDish.get(id);
+      instance = checkExpired(id);
       if (instance != null)
         return instance;
 
@@ -63,17 +74,21 @@ public class Dish extends Entity {
       ) {
         selectStatement.setInt(1, id);
         final ResultSet resultSet = selectStatement.executeQuery();
-        final String name;
-        final String description;
-        final Type type;
-        final String imageUrl;
+        String name = null;
+        String description = null;
+        Type type = null;
+        String imageUrl = null;
+        Date createdOn = null;
         if (resultSet.next()) {
           name = resultSet.getString(2);
           description = resultSet.getString(3);
           type = Type.valueOf(resultSet.getString(4).toUpperCase());
           imageUrl = resultSet.getString(5);
+          createdOn = resultSet.getTimestamp(6);
         }
-        else {
+
+        final boolean insertDish;
+        if ((insertDish = createdOn == null) || createdOn.getTime() <= System.currentTimeMillis() - Config.getConfig()._db(0)._dishTTL$().text() * 60 * 60 * 1000) {
           final URL serviceUrl = new URL(dishServiceUrl.replace("${id}", String.valueOf(id)));
           logger.info("serviceUrl: " + serviceUrl.toExternalForm());
           final HttpsURLConnection urlConnection = (HttpsURLConnection)serviceUrl.openConnection();
@@ -91,22 +106,25 @@ public class Dish extends Entity {
               image = object.get("image1");
 
             imageUrl = image == null || image.isJsonNull() ? null : image.getAsString();
+            createdOn = new Date();
           }
 
-          try (final PreparedStatement insertStatement = connection.prepareStatement("INSERT INTO dish VALUES (?, ?, ?, ?, ?)")) {
-            insertStatement.setInt(1, id);
-            insertStatement.setString(2, name);
-            insertStatement.setString(3, description);
-            insertStatement.setString(4, type.toString());
+          final int paramOffset = insertDish ? 0 : 1;
+          try (final PreparedStatement insertStatement = insertDish ? connection.prepareStatement("INSERT INTO dish VALUES (?, ?, ?, ?, ?, ?)") : connection.prepareStatement("UPDATE dish SET name = ?, description = ?, type = ?, image_url = ?, created_on = ? WHERE id = ?")) {
+            insertStatement.setInt(insertDish ? 1 : 6, id);
+            insertStatement.setString(2 - paramOffset, name);
+            insertStatement.setString(3 - paramOffset, description);
+            insertStatement.setString(4 - paramOffset, type.toString());
             if (imageUrl != null)
-              insertStatement.setString(5, imageUrl);
+              insertStatement.setString(5 - paramOffset, imageUrl);
             else
-              insertStatement.setNull(5, Types.VARCHAR);
+              insertStatement.setNull(5 - paramOffset, Types.VARCHAR);
+            insertStatement.setTimestamp(6 - paramOffset, new Timestamp(createdOn.getTime()));
             insertStatement.executeUpdate();
           }
         }
 
-        idToDish.put(id, instance = new Dish(id, name, description, type, imageUrl));
+        idToDish.put(id, instance = new Dish(id, name, description, type, imageUrl, createdOn));
         return instance;
       }
     }
@@ -117,12 +135,14 @@ public class Dish extends Entity {
   public final String description;
   public final Type type;
   public final String imageUrl;
+  public final Date createdOn;
 
-  private Dish(final int id, final String name, final String description, final Type type, final String imageUrl) {
+  private Dish(final int id, final String name, final String description, final Type type, final String imageUrl, final Date createdOn) {
     this.id = id;
     this.name = name;
     this.description = description;
     this.type = type;
     this.imageUrl = imageUrl;
+    this.createdOn = createdOn;
   }
 }

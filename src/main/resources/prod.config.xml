@@ -39,40 +39,42 @@
     <serviceDestination scheme="https" host="survey.bentonow.com" port="443"/>
   </mail>
   
-  <dbcp xmlns="http://commons.safris.org/dbcp.xsd" name="survey">
-    <jdbc>
-      <url>jdbc:mysql://bento-prod-db1.cehcqzecegos.us-west-2.rds.amazonaws.com/survey</url>
-      <driverClassName>com.mysql.jdbc.Driver</driverClassName>
-      <username>survey</username>
-      <password>xqTMy2FluQ</password> 
-      <loginTimeout>-1</loginTimeout>
-    </jdbc>
-    <default>
-      <autoCommit>true</autoCommit>
-      <readOnly>false</readOnly>
-      <transactionIsolation>READ_UNCOMMITTED</transactionIsolation>
-    </default>
-    <size>
-      <initialSize>0</initialSize>
-      <maxActive>8</maxActive>
-      <maxIdle>8</maxIdle>
-      <minIdle>0</minIdle>
-      <maxWait>-1</maxWait>
-    </size>
-    <management>
-      <timeBetweenEvictionRuns>-1</timeBetweenEvictionRuns>
-      <numTestsPerEvictionRun>3</numTestsPerEvictionRun>
-      <minEvictableIdleTime>1800000</minEvictableIdleTime>
-    </management>
-    <preparedStatements>
-      <poolPreparedStatements>false</poolPreparedStatements>
-      <maxOpenPreparedStatements>-1</maxOpenPreparedStatements>
-    </preparedStatements>
-    <removal>
-      <removeAbandoned>false</removeAbandoned>
-      <removeAbandonedTimeout>300</removeAbandonedTimeout>
-      <logAbandoned>false</logAbandoned>
-    </removal>
-  </dbcp>
+  <db dishTTL="24">
+    <dbcp xmlns="http://commons.safris.org/dbcp.xsd" name="survey">
+      <jdbc>
+        <url>jdbc:mysql://bento-prod-db1.cehcqzecegos.us-west-2.rds.amazonaws.com/survey</url>
+        <driverClassName>com.mysql.jdbc.Driver</driverClassName>
+        <username>survey</username>
+        <password>xqTMy2FluQ</password> 
+        <loginTimeout>-1</loginTimeout>
+      </jdbc>
+      <default>
+        <autoCommit>true</autoCommit>
+        <readOnly>false</readOnly>
+        <transactionIsolation>READ_UNCOMMITTED</transactionIsolation>
+      </default>
+      <size>
+        <initialSize>0</initialSize>
+        <maxActive>8</maxActive>
+        <maxIdle>8</maxIdle>
+        <minIdle>0</minIdle>
+        <maxWait>-1</maxWait>
+      </size>
+      <management>
+        <timeBetweenEvictionRuns>-1</timeBetweenEvictionRuns>
+        <numTestsPerEvictionRun>3</numTestsPerEvictionRun>
+        <minEvictableIdleTime>1800000</minEvictableIdleTime>
+      </management>
+      <preparedStatements>
+        <poolPreparedStatements>false</poolPreparedStatements>
+        <maxOpenPreparedStatements>-1</maxOpenPreparedStatements>
+      </preparedStatements>
+      <removal>
+        <removeAbandoned>false</removeAbandoned>
+        <removeAbandonedTimeout>300</removeAbandonedTimeout>
+        <logAbandoned>false</logAbandoned>
+      </removal>
+    </dbcp>
+  </db>
   
 </config>

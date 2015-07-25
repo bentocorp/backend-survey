@@ -303,7 +303,15 @@
         <xs:element name="webApi" type="cf:webApi"/>
         <xs:element name="worker" type="cf:worker"/>
         <xs:element name="mail" type="cf:mail"/>
-        <xs:element ref="dbcp:dbcp"/>
+        <xs:element name="db">
+          <xs:complexType>
+            <xs:all>
+              <xs:element ref="dbcp:dbcp"/>
+            </xs:all>
+            <!-- in hours -->
+            <xs:attribute name="dishTTL" type="xs:positiveInteger" use="required"/>
+          </xs:complexType>
+        </xs:element>
       </xs:sequence>
     </xs:complexType>
   </xs:element>

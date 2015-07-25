@@ -26,7 +26,7 @@ public abstract class Entity {
 
   static {
     try {
-      dataSource = DataSources.createDataSource(Config.getConfig().dbcp_dbcp(0));
+      dataSource = DataSources.createDataSource(Config.getConfig()._db(0).dbcp_dbcp(0));
     }
     catch (final SQLException e) {
       throw new ExceptionInInitializerError(e);

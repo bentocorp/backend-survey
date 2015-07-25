@@ -71,7 +71,8 @@ public class Meal extends Entity {
           final String description = resultSet.getString(9);
           final Dish.Type type = Dish.Type.valueOf(resultSet.getString(10).toUpperCase());
           final String imageUrl = resultSet.getString(11);
-          meal.dishes.add(Dish.create(dishId, name, description, type, imageUrl));
+          final Date createdOn = resultSet.getTimestamp(12);
+          meal.dishes.add(Dish.create(dishId, name, description, type, imageUrl, createdOn));
         }
       }
 
@@ -224,7 +225,8 @@ public class Meal extends Entity {
           final String description = resultSet.getString(9);
           final Dish.Type type = Dish.Type.valueOf(resultSet.getString(10).toUpperCase());
           final String imageUrl = resultSet.getString(11);
-          meal.dishes.add(Dish.create(dishId, name, description, type, imageUrl));
+          final Date createdOn = resultSet.getTimestamp(12);
+          meal.dishes.add(Dish.create(dishId, name, description, type, imageUrl, createdOn));
         }
 
         return results;

@@ -2,13 +2,14 @@
 <database name="survey"
   xmlns="http://xdb.safris.org/xdl.xsd"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://xdb.safris.org/xdl.xsd file:/Users/seva/Work/safris/org/xdb/xdl/src/main/resources/xdl.xsd">
+  xsi:schemaLocation="http://xdb.safris.org/xdl.xsd http://xdb.safris.org/xdl.xsd">
   <table name="dish">
     <column name="id" xsi:type="integer" precision="8" unsigned="true" null="false"/>
     <column name="name" xsi:type="char" variant="true" length="255" null="false"/>
     <column name="description" xsi:type="char" variant="true" length="255" null="false"/>
     <column name="type" xsi:type="enum" values="main side" null="false"/>
     <column name="image_url" xsi:type="char" variant="true" length="255" null="false"/>
+    <column name="created_on" xsi:type="dateTime" null="false"/>
     <constraints>
       <primaryKey>
         <column name="id"/>
