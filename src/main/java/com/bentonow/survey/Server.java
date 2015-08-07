@@ -37,6 +37,7 @@ import com.bentonow.resource.survey.config.$cf_https;
 import com.bentonow.resource.survey.config.$cf_logging;
 import com.bentonow.resource.survey.config.cf_config;
 import com.bentonow.survey.service.AdminServlet;
+import com.bentonow.survey.service.ReportServlet;
 import com.bentonow.survey.service.ResubscribeServlet;
 import com.bentonow.survey.service.SubmissionServlet;
 import com.bentonow.survey.service.UnsubscribeServlet;
@@ -69,6 +70,7 @@ public class Server {
     final ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
     addAuthRealm(servletContextHandler, config._admin(0)._credentials(0)._username$().text(), config._admin(0)._credentials(0)._password$().text(), "Restricted", "/a");
     addServlet(servletContextHandler, new AdminServlet());
+    addServlet(servletContextHandler, new ReportServlet());
     addServlet(servletContextHandler, new ResubscribeServlet(config));
     addServlet(servletContextHandler, new SubmissionServlet(config));
     addServlet(servletContextHandler, new UnsubscribeServlet(config));

@@ -239,18 +239,35 @@ public class Meal extends Entity {
     protected void insert(final Long from, final Long to, final SortedMap<Long,Meal> data) {
       logger.info("dbTier.insert(" + dateFormatLocal.get().format(from) + ", " + dateFormatLocal.get().format(to) + ", " + data.size() + ")");
       try (final Connection connection = getConnection()) {
-        try (final PreparedStatement mealStatement = connection.prepareStatement("INSERT INTO meal VALUES (?, ?, ?, ?, ?, ?)")) {
+        try (
+          final PreparedStatement mealInsertStatement = connection.prepareStatement("INSERT INTO meal VALUES (?, ?, ?, ?, ?, ?)");
+          final PreparedStatement mealUpdateStatement = connection.prepareStatement("UPDATE meal SET order_id = ?, created_on = ?, email = ?, sent = ?, skipped = ? WHERE id = ?");
+        ) {
           for (final Meal meal : data.values()) {
-            mealStatement.setInt(1, meal.id);
-            mealStatement.setInt(2, meal.orderId);
-            mealStatement.setTimestamp(3, new java.sql.Timestamp(meal.createdOn.getTime()));
-            mealStatement.setString(4, meal.email);
-            mealStatement.setBoolean(5, meal.sent);
-            mealStatement.setBoolean(6, meal.skipped);
-            mealStatement.addBatch();
+            try {
+              mealInsertStatement.setInt(1, meal.id);
+              mealInsertStatement.setInt(2, meal.orderId);
+              mealInsertStatement.setTimestamp(3, new java.sql.Timestamp(meal.createdOn.getTime()));
+              mealInsertStatement.setString(4, meal.email);
+              mealInsertStatement.setBoolean(5, meal.sent);
+              mealInsertStatement.setBoolean(6, meal.skipped);
+              mealInsertStatement.execute();
+            }
+            catch (final SQLException e) {
+              if (e.getErrorCode() == 1062) {
+                mealUpdateStatement.setInt(1, meal.orderId);
+                mealUpdateStatement.setTimestamp(2, new java.sql.Timestamp(meal.createdOn.getTime()));
+                mealUpdateStatement.setString(3, meal.email);
+                mealUpdateStatement.setBoolean(4, meal.sent);
+                mealUpdateStatement.setBoolean(5, meal.skipped);
+                mealUpdateStatement.setInt(6, meal.id);
+                mealUpdateStatement.execute();
+              }
+              else {
+                logger.throwing(Meal.class.getName(), "insert", e);
+              }
+            }
           }
-
-          mealStatement.executeBatch();
         }
 
         try (
@@ -271,6 +288,9 @@ public class Meal extends Entity {
                   mealDishUpdateStatement.setInt(2, dish.id);
                   mealDishUpdateStatement.executeUpdate();
                 }
+                else {
+                  logger.throwing(Meal.class.getName(), "insert", e);
+                }
               }
             }
           }
@@ -289,9 +309,12 @@ public class Meal extends Entity {
             }
           }
         }
+        catch (final SQLException e) {
+          logger.throwing(Meal.class.getName(), "insert", e);
+        }
       }
       catch (final SQLException e) {
-        throw new RuntimeException(e);
+        logger.throwing(Meal.class.getName(), "insert", e);
       }
     }
   };

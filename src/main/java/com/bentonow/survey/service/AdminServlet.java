@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet(urlPatterns={"/a"})
+@WebServlet(urlPatterns={"/admin"})
 public class AdminServlet extends HttpServlet {
   private static final long serialVersionUID = 7390946258203407208L;
 

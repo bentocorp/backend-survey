@@ -33,7 +33,7 @@ public abstract class Entity {
     }
   }
 
-  protected static Connection getConnection() throws SQLException {
+  public static Connection getConnection() throws SQLException {
     return ConnectionProxy.getInstance(dataSource.getConnection());
   }
 
