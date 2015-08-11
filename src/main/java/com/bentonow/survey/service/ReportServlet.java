@@ -87,8 +87,11 @@ public class ReportServlet extends HttpServlet {
         final ResultSet resultSet = selectStatement.executeQuery(query1);
         while (resultSet.next()) {
           final int oderId = resultSet.getInt(1);
-          final int rating = resultSet.getInt(4);
-          mainRows.put(oderId, "<tr><td nowrap><b>" + oderId + "</b></td><td nowrap><b>" + resultSet.getString(2) + "</b></td><td nowrap><b>" + resultSet.getString(3) + "</b></td><td align='right' nowrap><b>" + (rating < 8 ? "<font color='red'>" : "<font color='green'>") + rating + "</font></b></td><td nowrap><b>" + resultSet.getString(5) + "</b></td></tr>\n");
+          Integer rating = resultSet.getInt(4);
+          if (resultSet.wasNull())
+            rating = null;
+
+          mainRows.put(oderId, "<tr><td nowrap><b>" + oderId + "</b></td><td nowrap><b>" + resultSet.getString(2) + "</b></td><td nowrap><b>" + resultSet.getString(3) + "</b></td><td align='right' nowrap><b>" + (rating != null && rating < 8 ? "<font color='red'>" : "<font color='green'>") + rating + "</font></b></td><td nowrap><b>" + resultSet.getString(5) + "</b></td></tr>\n");
         }
       }
       catch (final SQLException e) {
@@ -135,8 +138,11 @@ public class ReportServlet extends HttpServlet {
           out.append("<td></td>\n");
           out.append("<td nowrap>").append(resultSet.getString(2)).append("</td>\n");
           out.append("<td nowrap>").append(resultSet.getString(3)).append("</td>\n");
-          final int rating = resultSet.getInt(4);
-          out.append("<td align='right' nowrap>").append(rating == 0 ? "<font color='red'>" : "<font color='green'>").append("" + rating).append("</font>").append("</td>\n");
+          Integer rating = resultSet.getInt(4);
+          if (resultSet.wasNull())
+            rating = null;
+
+          out.append("<td align='right' nowrap>").append(rating != null && rating == 0 ? "<font color='red'>" : "<font color='green'>").append("" + rating).append("</font>").append("</td>\n");
           out.append("<td>").append(resultSet.getString(5)).append("</td>\n");
           out.append("</tr>\n");
         }
