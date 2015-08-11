@@ -68,7 +68,7 @@ public class Server {
     server.setConnectors(new Connector[] {makeConnector(server, config)});
 
     final ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-    addAuthRealm(servletContextHandler, config._admin(0)._credentials(0)._username$().text(), config._admin(0)._credentials(0)._password$().text(), "Restricted", "/a");
+    addAuthRealm(servletContextHandler, config._admin(0)._credentials(0)._username$().text(), config._admin(0)._credentials(0)._password$().text(), "Restricted", AdminServlet.class, ReportServlet.class);
     addServlet(servletContextHandler, new AdminServlet());
     addServlet(servletContextHandler, new ReportServlet());
     addServlet(servletContextHandler, new ResubscribeServlet(config));
@@ -144,8 +144,7 @@ public class Server {
       handler.addServlet(new ServletHolder(servlet), urlPattern);
   }
 
-  private static final void addAuthRealm(final ServletContextHandler handler, final String username, final String password, final String realm, final String ... path) {
-    logger.info(realm + ": " + Arrays.toString(path));
+  private static final void addAuthRealm(final ServletContextHandler handler, final String username, final String password, final String realm, final Class<? extends HttpServlet> ... servlets) {
     HashLoginService loginService = new HashLoginService();
     loginService.putUser(username, Credential.getCredential(password), new String[] {
       "user"
@@ -164,11 +163,25 @@ public class Server {
     securityHandler.setRealmName("myrealm");
     securityHandler.setLoginService(loginService);
 
-    for (final String p : path) {
-      final ConstraintMapping constraintMapping = new ConstraintMapping();
-      constraintMapping.setConstraint(constraint);
-      constraintMapping.setPathSpec(p);
-      securityHandler.addConstraintMapping(constraintMapping);
+    for (final Class<? extends HttpServlet> servlet : servlets) {
+      final WebServlet annotation = servlet.getAnnotation(WebServlet.class);
+      if (annotation == null) {
+        logger.warning(servlet.getSimpleName() + " is missing a @WebServlet annotation, so its urlPatterns spec is unknown");
+        continue;
+      }
+
+      if (annotation.urlPatterns() == null || annotation.urlPatterns().length == 0) {
+        logger.warning(servlet.getSimpleName() + " is missing the urlPatterns spec in its @WebServlet annotation");
+        continue;
+      }
+
+      logger.info(servlet.getSimpleName() + " [" + realm + "]: " + Arrays.toString(annotation.urlPatterns()));
+      for (final String urlPattern : annotation.urlPatterns()) {
+        final ConstraintMapping constraintMapping = new ConstraintMapping();
+        constraintMapping.setConstraint(constraint);
+        constraintMapping.setPathSpec(urlPattern);
+        securityHandler.addConstraintMapping(constraintMapping);
+      }
     }
 
     handler.setSecurityHandler(securityHandler);
