@@ -56,8 +56,6 @@ public class MailSender {
   }
 
   public void send(final List<Meal> meals) {
-    if (true)
-      return;
     logger.info("" + meals.size());
     try {
       if (meals.size() == 0)
