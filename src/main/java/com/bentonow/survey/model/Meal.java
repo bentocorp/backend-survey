@@ -160,7 +160,7 @@ public class Meal extends Entity {
           final JsonObject object = iterator.next().getAsJsonObject();
           final int id = object.get("pk_CustomerBentoBox").getAsInt();
           final int orderId = object.get("pk_Order").getAsInt();
-          final Date createdOn = dateFormatLocal.get().parse(object.get("created_at").getAsString());
+          final Date createdOn = dateFormatLocal.get().parse(object.get("os_updated_at").getAsString());
           final String email = object.get("email").getAsString();
           final List<Dish> dishes = new ArrayList<Dish>();
           dishes.add(Dish.fetch(object.get("main_id").getAsInt()));

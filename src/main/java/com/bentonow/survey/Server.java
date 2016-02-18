@@ -124,7 +124,6 @@ public class Server {
     final SslContextFactory sslContextFactory = new SslContextFactory();
     sslContextFactory.setKeyStorePath(Resources.getResource(httpsConfig._keystore(0)._path$().text()).getURL().toExternalForm());
     sslContextFactory.setKeyStorePassword(httpsConfig._keystore(0)._password$().text());
-//    sslContextFactory.setKeyManagerPassword("123456");
 
     final ServerConnector connector = new ServerConnector(server, new SslConnectionFactory(sslContextFactory, "http/1.1"), new HttpConnectionFactory(https));
     connector.setPort(config._server(0)._port$().text());
