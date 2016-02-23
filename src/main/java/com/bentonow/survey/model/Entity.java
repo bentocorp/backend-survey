@@ -17,6 +17,7 @@ import com.bentonow.survey.Config;
 
 public abstract class Entity {
   protected static final HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+    @Override
     public boolean verify(final String arg0, final SSLSession arg1) {
       return true;
     }
@@ -34,17 +35,20 @@ public abstract class Entity {
   }
 
   public static Connection getConnection() throws SQLException {
-    return ConnectionProxy.getInstance(dataSource.getConnection());
+    return new ConnectionProxy(dataSource.getConnection());
   }
 
+  @Override
   public int hashCode() {
     return HashCodes.hashCode(this);
   }
 
+  @Override
   public boolean equals(final Object obj) {
     return Equals.equals(this, obj);
   }
 
+  @Override
   public String toString() {
     return ToStrings.toString(this);
   }

@@ -35,6 +35,7 @@ public class Meal extends Entity {
   private static final Logger logger = Logger.getLogger(Meal.class.getName());
   private static final Map<Integer,Meal> mealIdToMeal = new HashMap<Integer,Meal>();
   private static final ThreadLocal<SimpleDateFormat> dateFormatLocal = new ThreadLocal<SimpleDateFormat>() {
+    @Override
     protected SimpleDateFormat initialValue() {
       return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     }
@@ -136,10 +137,12 @@ public class Meal extends Entity {
   private static final TieredRangeFetcher<Long,Meal> webServiceTier = new TieredRangeFetcher<Long,Meal>(null) {
     private final Long[] range = new Long[] {Long.MIN_VALUE, Long.MAX_VALUE};
 
+    @Override
     protected Long[] range() {
       return range;
     }
 
+    @Override
     protected SortedMap<Long,Meal> select(final Long from, final Long to) {
       logger.info("webServiceTier.select(" + dateFormatLocal.get().format(from) + ", " + dateFormatLocal.get().format(to) + ")");
 
@@ -178,11 +181,13 @@ public class Meal extends Entity {
       }
     }
 
+    @Override
     protected void insert(final Long from, final Long to, final SortedMap<Long,Meal> data) {
     }
   };
 
   private static final TieredRangeFetcher<Long,Meal> dbTier = new TieredRangeFetcher<Long,Meal>(webServiceTier) {
+    @Override
     protected Long[] range() {
       try (
         final Connection connection = getConnection();
@@ -196,6 +201,7 @@ public class Meal extends Entity {
       }
     }
 
+    @Override
     protected SortedMap<Long,Meal> select(final Long from, final Long to) {
       logger.info("dbTier.select(" + dateFormatLocal.get().format(from) + ", " + dateFormatLocal.get().format(to) + ")");
       try (
@@ -236,6 +242,7 @@ public class Meal extends Entity {
       }
     }
 
+    @Override
     protected void insert(final Long from, final Long to, final SortedMap<Long,Meal> data) {
       logger.info("dbTier.insert(" + dateFormatLocal.get().format(from) + ", " + dateFormatLocal.get().format(to) + ", " + data.size() + ")");
       try (final Connection connection = getConnection()) {
@@ -323,15 +330,18 @@ public class Meal extends Entity {
     private final SortedMap<Long,Meal> cache = new TreeMap<Long,Meal>();
     private final Long[] range = new Long[] {0L, 0L};
 
+    @Override
     protected Long[] range() {
       return range;
     }
 
+    @Override
     protected SortedMap<Long,Meal> select(final Long from, final Long to) {
       logger.info("cacheTier.select(" + dateFormatLocal.get().format(from) + ", " + dateFormatLocal.get().format(to) + ")");
       return cache.subMap(from, to);
     }
 
+    @Override
     protected void insert(final Long from, final Long to, final SortedMap<Long,Meal> data) {
       logger.info("cacheTier.insert(" + dateFormatLocal.get().format(from) + ", " + dateFormatLocal.get().format(to) + ", " + data.size() + ")");
       range[0] = from < range[0] ? from : range[0];
