@@ -73,10 +73,12 @@ public class MailSender {
         final String[] to = toOverride != null ? toOverride : new String[] {meal.email};
         final String content = container.replace("${mealId}", "" + meal.id).replace("${email}", to[0]).replace("<!-- items-data -->", questions.substring(1)).replace(" id=\"items-container\"", "");
         messages[i] = new Mail.Message(subject, new MimeContent(content, "text/html"), from, to, ccOverride, bccOverride) {
+          @Override
           public void success() {
             meal.sent(true);
           }
 
+          @Override
           public void failure(final MessagingException e) {
           }
         };

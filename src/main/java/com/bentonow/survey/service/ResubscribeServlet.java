@@ -19,6 +19,7 @@ public class ResubscribeServlet extends TemplatedServlet {
     super(config, "resubscribed.html");
   }
 
+  @Override
   protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
     log(request.getParameterMap().toString());
 

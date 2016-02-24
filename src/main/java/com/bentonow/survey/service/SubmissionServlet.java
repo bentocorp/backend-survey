@@ -23,6 +23,7 @@ public class SubmissionServlet extends TemplatedServlet {
     super(config, "thankyou.html", "yelp.html");
   }
 
+  @Override
   protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
     log(request.getParameterMap().toString());
     String content = template[0];

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 public class AdminServlet extends HttpServlet {
   private static final long serialVersionUID = 7390946258203407208L;
 
+  @Override
   protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
     String out = "";
     out += "<html>";

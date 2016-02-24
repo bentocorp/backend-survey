@@ -100,6 +100,7 @@ public class Server {
     worker.start();
 
     Thread.setDefaultUncaughtExceptionHandler(new UncaughtExceptionHandler() {
+      @Override
       public void uncaughtException(final Thread t, final Throwable e) {
         command.sendException(e);
         e.printStackTrace();
@@ -143,6 +144,7 @@ public class Server {
       handler.addServlet(new ServletHolder(servlet), urlPattern);
   }
 
+  @SafeVarargs
   private static final void addAuthRealm(final ServletContextHandler handler, final String username, final String password, final String realm, final Class<? extends HttpServlet> ... servlets) {
     HashLoginService loginService = new HashLoginService();
     loginService.putUser(username, Credential.getCredential(password), new String[] {

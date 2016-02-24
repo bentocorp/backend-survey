@@ -93,6 +93,7 @@ public class Worker implements Runnable {
     executor.scheduleWithFixedDelay(this, delay, period, TimeUnit.MILLISECONDS);
   }
 
+  @Override
   public void run() {
     try {
       final long now = DateUtil.dropMilliseconds(System.currentTimeMillis());

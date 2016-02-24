@@ -39,6 +39,7 @@ public class ReportServlet extends HttpServlet {
     return year + "-" + (month.length() == 1 ? "0" + month : month) + "-" + (date.length() == 1 ? "0" + date : date);
   }
 
+  @Override
   protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
     final String fromParameter = ReportServlet.formatDate(request.getParameter("f"));
     final String toParameter = ReportServlet.formatDate(request.getParameter("t"));

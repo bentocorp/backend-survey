@@ -20,6 +20,7 @@ public class UnsubscribeServlet extends TemplatedServlet {
     super(config, "unsubscribed.html");
   }
 
+  @Override
   protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
     log(request.getParameterMap().toString());
 
