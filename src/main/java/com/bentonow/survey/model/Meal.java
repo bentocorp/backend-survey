@@ -169,19 +169,19 @@ public class Meal extends Entity {
 
           dishes.add(Dish.fetch(object.get("main_id").getAsInt()));
           final JsonElement side1Id = object.get("side1_id");
-          if (side1Id != null)
+          if (!side1Id.isJsonNull())
             dishes.add(Dish.fetch(side1Id.getAsInt()));
 
           final JsonElement side2Id = object.get("side2_id");
-          if (side2Id != null)
+          if (!side2Id.isJsonNull())
             dishes.add(Dish.fetch(side2Id.getAsInt()));
 
           final JsonElement side3Id = object.get("side3_id");
-          if (side3Id != null)
+          if (!side3Id.isJsonNull())
             dishes.add(Dish.fetch(side3Id.getAsInt()));
 
           final JsonElement side4Id = object.get("side4_id");
-          if (side4Id != null)
+          if (!side4Id.isJsonNull())
             dishes.add(Dish.fetch(side4Id.getAsInt()));
 
           meals.put(createdOn.getTime(), new Meal(id, orderId, createdOn, email, false, meals.size() != 0 && meals.get(meals.lastKey()).orderId == orderId, dishes)); // FIXME: the last param marks subsequent orders for the same orderId as "skipped"
