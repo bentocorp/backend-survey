@@ -10,8 +10,8 @@ import org.safris.commons.xml.dom.DOMs;
 import org.safris.xml.generator.compiler.runtime.Bindings;
 import org.xml.sax.InputSource;
 
-import com.bentonow.resource.survey.config.$cf_parameters;
-import com.bentonow.resource.survey.config.cf_config;
+import com.bentonow.resource.survey.config.xe.$cf_parameters;
+import com.bentonow.resource.survey.config.xe.cf_config;
 
 public class Config {
   private static final Logger logger = Logger.getLogger(Config.class.getName());

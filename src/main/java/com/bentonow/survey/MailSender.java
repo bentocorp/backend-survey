@@ -14,7 +14,7 @@ import org.safris.commons.lang.Throwables;
 import org.safris.commons.net.mail.Mail;
 import org.safris.commons.net.mail.MimeContent;
 
-import com.bentonow.resource.survey.config.$cf_mail;
+import com.bentonow.resource.survey.config.xe.$cf_mail;
 import com.bentonow.survey.model.Dish;
 import com.bentonow.survey.model.Meal;
 import com.bentonow.survey.service.TemplatedServlet;

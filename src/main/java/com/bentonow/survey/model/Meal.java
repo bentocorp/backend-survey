@@ -1,6 +1,5 @@
 package com.bentonow.survey.model;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -41,7 +40,7 @@ public class Meal extends Entity {
     }
   };
 
-  public static Meal lookupMeal(final int mealId) throws IOException, SQLException {
+  public static Meal lookupMeal(final int mealId) throws SQLException {
     logger.info("" + mealId);
     Meal meal = mealIdToMeal.get(mealId);
     if (meal != null)
@@ -127,7 +126,7 @@ public class Meal extends Entity {
     return unsentMeals;
   }
 
-  public static Collection<Meal> fetchMeals(final Long from, final Long to) throws SQLException {
+  public static Collection<Meal> fetchMeals(final Long from, final Long to) {
     logger.info(dateFormatLocal.get().format(from) + ", " + dateFormatLocal.get().format(to));
     return cacheTier.fetch(from, to, null).values();
   }

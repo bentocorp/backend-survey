@@ -13,12 +13,12 @@ import org.safris.commons.lang.Numbers;
 import org.safris.commons.xml.binding.Time;
 import org.safris.xml.generator.compiler.runtime.Bindings;
 
-import com.bentonow.resource.survey.config.$cf_days;
-import com.bentonow.resource.survey.config.$cf_execute;
-import com.bentonow.resource.survey.config.$cf_hours;
-import com.bentonow.resource.survey.config.$cf_minutes;
-import com.bentonow.resource.survey.config.$cf_seconds;
-import com.bentonow.resource.survey.config.$cf_worker;
+import com.bentonow.resource.survey.config.xe.$cf_days;
+import com.bentonow.resource.survey.config.xe.$cf_execute;
+import com.bentonow.resource.survey.config.xe.$cf_hours;
+import com.bentonow.resource.survey.config.xe.$cf_minutes;
+import com.bentonow.resource.survey.config.xe.$cf_seconds;
+import com.bentonow.resource.survey.config.xe.$cf_worker;
 import com.bentonow.survey.model.Meal;
 
 public class Worker implements Runnable {

@@ -32,7 +32,7 @@ public class Dish extends Entity {
   private static final String dishServiceUrl = Config.getConfig()._webApi(0)._protocol$().text() + "://" + Config.getConfig()._webApi(0)._host$().text() + "/extapi/dish/${id}?" + Config.getParameters(Config.getConfig()._webApi(0)._parameters(0));
   private static final Map<Integer,Dish> idToDish = new HashMap<Integer,Dish>();
 
-  public static Dish create(final int id, final String name, final String description, final Type type, final String imageUrl, final Date createdOn) throws IOException, SQLException {
+  public static Dish create(final int id, final String name, final String description, final Type type, final String imageUrl, final Date createdOn) {
     logger.finest(id + "...");
     Dish instance = idToDish.get(id);
     if (instance != null)

@@ -8,14 +8,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.safris.commons.datatypes.xe.$sp_scheme;
 import org.safris.commons.io.Streams;
 import org.safris.commons.lang.Resource;
 import org.safris.commons.lang.Resources;
 
-import com.bentonow.resource.survey.config.$cf_mail;
-import com.bentonow.resource.survey.config.$cf_mail._serviceDestination._scheme$;
-import com.bentonow.resource.survey.config.$cf_server;
-import com.bentonow.resource.survey.config.cf_config;
+import com.bentonow.resource.survey.config.xe.$cf_mail;
+import com.bentonow.resource.survey.config.xe.$cf_server;
+import com.bentonow.resource.survey.config.xe.cf_config;
 
 @SuppressWarnings("serial")
 public abstract class TemplatedServlet extends HttpServlet {
@@ -24,15 +24,15 @@ public abstract class TemplatedServlet extends HttpServlet {
   private static final Object mutex = new Object();
   private static String serverUrl = null;
 
-  public static String filter(final $cf_mail config, final String string) throws IOException {
+  public static String filter(final $cf_mail config, final String string) {
     if (serverUrl == null) {
       synchronized (mutex) {
         if (serverUrl == null) {
           final int port = config._serviceDestination(0)._port$().text();
           serverUrl = config._serviceDestination(0)._host$().text();
-          if (_scheme$.https.text().equals(config._serviceDestination(0)._scheme$().text()))
+          if ($sp_scheme.https.text().equals(config._serviceDestination(0)._scheme$().text()))
             serverUrl = port == 443 ? "https://" + serverUrl : "https://" + serverUrl + ":" + port;
-          else if (_scheme$.http.text().equals(config._serviceDestination(0)._scheme$().text()))
+          else if ($sp_scheme.http.text().equals(config._serviceDestination(0)._scheme$().text()))
             serverUrl = port == 80 ? "http://" + serverUrl : "http://" + serverUrl + ":" + port;
           else
             throw new UnsupportedOperationException("Unsupported scheme: " + config._serviceDestination(0)._scheme$().text());

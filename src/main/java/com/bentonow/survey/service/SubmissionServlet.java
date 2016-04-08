@@ -11,7 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.bentonow.resource.survey.config.cf_config;
+import com.bentonow.resource.survey.config.xe.cf_config;
 import com.bentonow.survey.model.DishSurvey;
 import com.bentonow.survey.model.MealSurvey;
 
